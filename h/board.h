@@ -11,28 +11,31 @@ class Board
 public:
     class Node
     {
-    public:
-        Node(const std::vector<size_t> &initial_state);
-        std::shared_ptr<std::vector<size_t>> val;
-        std::shared_ptr<Node> self;
-        std::shared_ptr<Node> up;
-        std::shared_ptr<Node> down;
-        std::shared_ptr<Node> right;
-        std::shared_ptr<Node> left;
-        std::shared_ptr<Node> parent;
-        
+        static void disp(const std::vector<int> &v);
 
-        void disp(const std::vector<size_t> &v);
+    public:
+        Node(const std::vector<int> &initial_state);
+        std::unique_ptr<std::vector<int>> val;
+        std::unique_ptr<Node> self;
+        std::unique_ptr<Node> up;
+        std::unique_ptr<Node> down;
+        std::unique_ptr<Node> right;
+        std::unique_ptr<Node> left;
+        std::unique_ptr<Node> parent;
     };
     std::queue<std::shared_ptr<Node>> search_queue;
-    std::set<std::shared_ptr<Node>> all_record;
+    std::set<std::string> all_record;
     std::shared_ptr<Node> head;
     std::shared_ptr<Node> current_node;
-    void make_adjacent_nodes(const std::vector<size_t> &current_node);
-    Board(const std::vector<size_t> &val);
+    void make_adjacent_nodes(const std::vector<int> &current_node);
+    Board(const std::vector<int> &val);
     void disp();
-    bool check_if_is_answer(const std::vector<size_t> &v);
+    void disp(const std::vector<int> &v);
+
+    bool check_if_is_answer(const std::vector<int> &v);
     bool search_for_answer(std::shared_ptr<Node> cu_node);
+    bool is_solvable(const std::vector<int> &v);
+    std::string make_str(const std::vector<int> &v);
 };
 
 #endif
