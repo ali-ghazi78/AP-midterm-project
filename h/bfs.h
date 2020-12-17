@@ -16,7 +16,6 @@ public:
     public:
         Node(const std::vector<int> & initial_state);
         std::shared_ptr<std::vector<int>> val;
-        std::shared_ptr<Node> self;
         std::shared_ptr<Node> up;
         std::shared_ptr<Node> down;
         std::shared_ptr<Node> right;

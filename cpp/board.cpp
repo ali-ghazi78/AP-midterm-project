@@ -6,49 +6,47 @@
 
 Board::Board(std::vector<int> val)
 {
-    head = std::make_shared<Node>(move(val));
+    head = new Node(move(val));
     current_node = head;
     head->parent = nullptr;
     search_queue.push(head);
+    all_record.insert(make_str(val));
+
     // head->disp(*(head->val));
+}
+size_t Board::Node::Node_no = 0;
+
+Board::Node::~Node()
+{
+    if (Node::Node_no % 1000 == 0)
+        std::cerr << "Node destructor:" << Node::Node_no << std::endl;
+
+    Node::Node_no--;
+    up = nullptr;
+    right = nullptr;
+    down = nullptr;
+    left = nullptr;
+    parent = nullptr;
 }
 Board::Node::Node(const std::vector<int> &initial_state)
 {
-    // disp(initial_state);
-    // std::cout << "here is probemic?" << std::endl;
-    // std::shared_ptr<std::vector<int>> fake_test;
-    // disp(initial_state);
-    // fake_test = std::make_shared<std::vector<int>>(move(initial_state));
-    std::cout << "here is probemic029" << std::endl;
-    std::cout << "val1 loc" << val << std::endl;
-    val = std::make_shared<std::vector<int>>();
-    std::cout << "val2 loc" << val << std::endl;
-    *val = move(initial_state);
-    std::cout << "val3 loc" << val << std::endl;
-    std::cout << "here is probemic2?" << std::endl;
-    // this->self = nullptr;
-    // this->right = nullptr;
-    // this->left = nullptr;
-    // this->up = nullptr;
-    // this->down = nullptr;
-    // this->parent = nullptr;
-    std::cout << "val4 loc" << val << std::endl;
+    val = std::make_shared<std::vector<int>>(move(initial_state));
+    right = nullptr;
+    left = nullptr;
+    up = nullptr;
+    down = nullptr;
+    parent = nullptr;
+    Node::Node_no++;
 }
-auto set_parent = [](std::shared_ptr<Board::Node> n, std::shared_ptr<Board::Node> b) {
-    if (n != nullptr)
-        n->parent = b;
-    else
-    {
-        std::cout << "fucckckkk no memeory is available " << std::endl;
-    }
-};
-auto la = [](std::vector<int> &vec1, int x, int y, int loc) {
+
+void Board::move_zero(std::vector<int> &vec1, int x, int y, int loc)
+{
     std::cout << "h34" << std::endl;
     std::cout << x << y << loc << std::endl;
 
     std::swap(vec1[loc], vec1[x + y * 3]);
     std::cout << "h35" << std::endl;
-};
+}
 void Board::make_adjacent_nodes(const std::vector<int> &current_node)
 {
     std::cout << "h1" << std::endl;
@@ -73,30 +71,50 @@ void Board::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::cout << (current_node[0]) << std::endl;
         std::vector<int> down = current_node;
-        la(down, x_down, y_down, loc);
-        this->current_node->down = std::make_shared<Node>(move(down));
-        set_parent(this->current_node->down, this->current_node);
+        move_zero(down, x_down, y_down, loc);
+        if (all_record.count(make_str(down)) == 0)
+        {
+            this->current_node->down = new Node(move(down));
+            all_address_to_del.push_back(this->current_node->down);
+            if (this->current_node->down != nullptr)
+                this->current_node->down->parent = this->current_node;
+        }
     }
     if (y_up != -1)
     {
         std::vector<int> up = current_node;
-        la(up, x_up, y_up, loc);
-        this->current_node->up = std::make_shared<Node>(move(up));
-        set_parent(this->current_node->up, this->current_node);
+        move_zero(up, x_up, y_up, loc);
+        if (all_record.count(make_str(up)) == 0)
+        {
+            this->current_node->up = new Node(move(up));
+            all_address_to_del.push_back(this->current_node->up);
+            if (this->current_node->up != nullptr)
+                this->current_node->up->parent = this->current_node;
+        }
     }
     if (x_right != -1)
     {
         std::vector<int> right = current_node;
-        la(right, x_right, y_right, loc);
-        this->current_node->right = std::make_shared<Node>(move(right));
-        set_parent(this->current_node->right, this->current_node);
+        move_zero(right, x_right, y_right, loc);
+        if (all_record.count(make_str(right)) == 0)
+        {
+            this->current_node->right = new Node(move(right));
+            all_address_to_del.push_back(this->current_node->right);
+            if (this->current_node->right != nullptr)
+                this->current_node->right->parent = this->current_node;
+        }
     }
     if (x_left != -1)
     {
         std::vector<int> left = current_node;
-        la(left, x_left, y_left, loc);
-        this->current_node->left = std::make_shared<Node>(move(left));
-        set_parent(this->current_node->left, this->current_node);
+        move_zero(left, x_left, y_left, loc);
+        if (all_record.count(make_str(left)) == 0)
+        {
+            this->current_node->left = new Node(move(left));
+            all_address_to_del.push_back(this->current_node->left);
+            if (this->current_node->left != nullptr)
+                this->current_node->left->parent = this->current_node;
+        }
     }
 }
 void Board::Node::disp(const std::vector<int> &v)
@@ -144,233 +162,129 @@ bool Board::check_if_is_answer(const std::vector<int> &v)
     return std::is_sorted(v.begin(), v.end() - 1) && v[v.size() - 1] == 0;
 }
 
-auto show_path = [](std::shared_ptr<Board::Node> n) {
+auto show_path = [](Board::Node *n) {
     size_t steps = 0;
     while (n != nullptr)
     {
+        // Board::err_disp(*n->val);
         steps++;
         n = n->parent;
     }
-    std::cout << "\n\033[32msteps : " << steps << "\033[0m" << std::endl;
+    std::cerr << "\n\033[32msteps : " << steps << "\033[0m" << std::endl;
     return steps;
 };
-bool Board::search_for_answer(std::shared_ptr<Node> cu_node)
+bool Board::search_for_answer(Node *cu_node)
 {
 
-    //10095
-    // std::cout<<"\n\033[32msteps : " <<sizeof( *search_queue.front()) <<"\033[0m"<<std::endl;
-    // std::cout << "here?1" << std::endl;
-
-    // std::cout << "here?2" << std::endl;
     disp(*cu_node->val);
-
     current_node = cu_node;
+
     std::cout << "here?3" << std::endl;
 
     make_adjacent_nodes(*(cu_node->val));
-    // std::cout << "here?4" << std::endl;
+
     std::cout << "here?3 out" << std::endl;
 
     if (cu_node != nullptr)
     {
         if (check_if_is_answer(*cu_node->val))
         {
-            // std::cout << "here?9" << std::endl;
-
             current_node = cu_node;
-
-            std::cout << "yes"
-                      << "khodesh" << std::endl;
-            // disp();
+            std::cerr << "yes khodesh" << std::endl;
             show_path(current_node);
-            return 0;
+            return 1;
         }
     }
-    // std::cout << "here?5" << std::endl;
+    else
+    {
+        std::cerr << "current node = 0 " << std::endl;
+        return 1;
+    }
 
     if (cu_node->up != nullptr)
     {
-        // std::cout << "here?55" << std::endl;
-        if (!all_record.count(this->make_str(*cu_node->up->val)))
+        std::cout << "here?909" << std::endl;
+        search_queue.push(cu_node->up);
+        all_record.insert(this->make_str(*cu_node->up->val));
+        if (check_if_is_answer(*cu_node->up->val))
         {
-            std::cout << "here?909" << std::endl;
+            std::cerr << "yes up" << std::endl;
+            current_node =  current_node->up;
+            show_path(current_node);
 
-            search_queue.push(cu_node->up);
-            all_record.insert(this->make_str(*cu_node->up->val));
+            return 1;
         }
-        else
-        {
-            // std::cout << "here?9" << std::endl;
-
-            std::cout << "up already contain" << std::endl;
-            // current_node->up->parent = nullptr;
-            // current_node->up->down = nullptr;
-            // current_node->up->right = nullptr;
-            // current_node->up->left = nullptr;
-            // current_node->up->up = nullptr;
-            // current_node->up->val = nullptr;
-            // cu_node->up = nullptr;
-        }
-        if (cu_node->up != nullptr)
-            if (check_if_is_answer(*cu_node->up->val))
-            {
-                std::cout << "here?09" << std::endl;
-
-                // current_node = cu_node->up;
-
-                std::cout << "yes"
-                          << "up";
-                // disp();
-                show_path(current_node);
-
-                return 0;
-            }
     }
-    // std::cout << "here?6" << std::endl;
 
     if (cu_node->down != nullptr)
     {
         std::cout << "here?66" << std::endl;
 
-        if (!all_record.count(this->make_str(*cu_node->down->val)))
+        search_queue.push(cu_node->down);
+        all_record.insert(this->make_str(*cu_node->down->val));
+
+        if (check_if_is_answer(*cu_node->down->val))
         {
-            std::cout << "here?9" << std::endl;
-
-            search_queue.push(cu_node->down);
-            all_record.insert(this->make_str(*cu_node->down->val));
+            std::cerr << "yes down" << std::endl;
+            current_node =  current_node->down;
+            
+            show_path(current_node);
+            return 1;
         }
-        else
-        {
-            std::cout << "here?9" << std::endl;
-
-            // current_node->down->up = nullptr;
-            // current_node->down->parent = nullptr;
-            // current_node->down->down = nullptr;
-            // current_node->down->right = nullptr;
-            // current_node->down->left = nullptr;
-            // current_node->down->val = nullptr;
-
-            // current_node->down->parent = nullptr;
-            // cu_node->down = nullptr;
-        }
-        std::cout << "here?67" << std::endl;
-
-        if (cu_node->down != nullptr)
-            if (check_if_is_answer(*cu_node->down->val))
-            {
-
-                // current_node = cu_node->down;
-
-                std::cout << "yes"
-                          << "down";
-
-                // disp();
-                show_path(current_node);
-
-                return 0;
-            }
     }
-    // std::cout << "here?7" << std::endl;
-
     if (cu_node->right != nullptr)
     {
-        std::cout << "here?77" << std::endl;
-
-        if (!all_record.count(this->make_str(*cu_node->right->val)))
+        search_queue.push(cu_node->right);
+        all_record.insert(this->make_str(*cu_node->right->val));
+        if (check_if_is_answer(*cu_node->right->val))
         {
+            std::cout << "here?9" << std::endl;
+            std::cerr << "yes right" << std::endl;
+            current_node =  current_node->right;
 
-            // std::cout << "here?9" << std::endl;
-            search_queue.push(cu_node->right);
-            all_record.insert(this->make_str(*cu_node->right->val));
+            show_path(current_node);
+
+            return 1;
         }
-        else
-        {
-            // std::cout << "here?9" << std::endl;
-
-            // current_node->right->up = nullptr;
-            // current_node->right->parent = nullptr;
-            // current_node->right->down = nullptr;
-            // current_node->right->right = nullptr;
-            // current_node->right->left = nullptr;
-            // current_node->right->val = nullptr;
-
-            // current_node->right->parent = nullptr;
-            // cu_node->right = nullptr;
-        }
-        if (cu_node->right != nullptr)
-            if (check_if_is_answer(*cu_node->right->val))
-            {
-                std::cout << "here?9" << std::endl;
-
-                // current_node = cu_node->right;
-
-                std::cout << "yes"
-                          << "right";
-                // disp();
-                show_path(current_node);
-
-                return 0;
-            }
     }
     // std::cout << "here?8" << std::endl;
 
     if (cu_node->left != nullptr)
     {
-        // std::cout << "here?88" << std::endl;
-        if (!all_record.count(this->make_str(*cu_node->left->val)))
+
+        search_queue.push(cu_node->left);
+        all_record.insert(this->make_str(*cu_node->left->val));
+        if (check_if_is_answer(*cu_node->left->val))
         {
-            // std::cout << "here?9" << std::endl;
-
-            search_queue.push(cu_node->left);
-            all_record.insert(this->make_str(*cu_node->left->val));
+            std::cerr << "yes left" << std::endl;
+            current_node = cu_node->left;
+            show_path(current_node);
+            return 1;
         }
-        else
-        {
-            // std::cout << "here?9" << std::endl;
-            // current_node->left->up = nullptr;
-            // current_node->left->parent = nullptr;
-            // current_node->left->down = nullptr;
-            // current_node->left->right = nullptr;
-            // current_node->left->left = nullptr;
-            // current_node->left->val = nullptr;
-
-            // current_node->left->parent = nullptr;
-            // cu_node->left = nullptr;
-        }
-        if (cu_node->left != nullptr)
-            if (check_if_is_answer(*cu_node->left->val))
-            {
-                std::cout << "here?9" << std::endl;
-
-                // current_node = cu_node->left;
-
-                std::cout << "yes"
-                          << "left";
-                // disp();
-                show_path(current_node);
-
-                return 0;
-            }
     }
     if (search_queue.size() >= 1)
         search_queue.pop();
 
-    std::cout << "here?9" << std::endl;
-    std::cout << "sizeis: " << search_queue.size() << std::endl;
+    // std::cerr << "sizeis: " << search_queue.size() << std::endl;
+    // if (Board::Node::Node_no % 1000 == 0)
+    //     std::cerr << "no of Nodes :" << Board::Node::Node_no << std::endl;
+
     if (search_queue.size() >= 1)
         cu_node = search_queue.front();
     else
     {
-        return 0;
+        std::cerr << "no Node reamained" << Board::Node::Node_no << std::endl;
+        return 1;
     }
+    current_node = cu_node;
 
-    // head = cu_node;
-    // std::cout << "here?10" << std::endl;
-    if (search_queue.size() < 8000)
-    {
-        search_for_answer(cu_node);
-    }
-    // std::cout << "here?11" << std::endl;
+    // if (search_queue.size() < 100000 && search_queue.size() != 0)
+    // {
+    //     search_for_answer(cu_node);
+    // }
+    // if (Board::Node::Node_no % 1000 == 0)
+        // std::cerr << "Done" << Board::Node::Node_no << std::endl;
+    
     return 0;
 }
 bool Board::is_solvable(const std::vector<int> &v)
@@ -392,22 +306,23 @@ bool Board::is_solvable(const std::vector<int> &v)
 }
 std::string Board::make_str(const std::vector<int> &v)
 {
-    std::cout << "start str making" << std::endl;
-
-    if (v.size() == 0)
-    {
-        std::cout << "real funked up?" << std::endl;
-        return std::string("000000000");
-    }
     std::string s = "";
-    std::cout<<"size of vecotr:"<<v.size()<<std::endl;
-    disp(v);
     for (int i = 0; i < 9; i++)
     {
-        std::cout<<"val of vec"<<i<<":"<<v[i]<<std::endl;
         s.append(std::to_string(v[i]));
     }
-
-    std::cout << "done str making" << std::endl;
     return s;
+}
+void Board::err_disp(const std::vector<int> &v)
+{
+    std::cerr << "\033[2;35m" << std::string(12, '-') << std::endl;
+    for (int i = 0; i < 3; i++)
+    {
+        for (size_t j = 0; j < 3; j++)
+        {
+            std::cerr << v[i * 3 + j] << "\t";
+        }
+        std::cerr << std::endl;
+    }
+    std::cerr << std::string(12, '-') << "\033[0m" << std::endl;
 }
