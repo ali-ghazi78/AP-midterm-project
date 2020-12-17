@@ -1,12 +1,12 @@
-#ifndef __BOARD__
-#define __BOARD__
+#ifndef __BFS__
+#define __BFS__
 #include <iostream>
 #include <vector>
 #include <memory>
 #include <queue>
 #include <set>
 
-class Board
+class BFS
 {
 public:
     class Node
@@ -28,8 +28,8 @@ public:
     std::shared_ptr<Node> head;
     std::shared_ptr<Node> current_node;
     void make_adjacent_nodes(const std::vector<int> &current_node);
-    Board(std::vector<int> val);
-    Board()=default;
+    BFS(std::vector<int> val);
+    BFS()=default;
     void disp();
     void disp( std::vector<int> v);
 
