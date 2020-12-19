@@ -4,6 +4,15 @@
 #include <string>
 #include <cmath>
 
+
+void Board::loop()
+{
+    bool done = false;
+    while(!done)
+    {
+        done = search_for_answer(current_node);
+    }
+}
 Board::Board(std::vector<int> val)
 {
     head = new Node(move(val));
@@ -166,11 +175,11 @@ auto show_path = [](Board::Node *n) {
     size_t steps = 0;
     while (n != nullptr)
     {
-        // Board::err_disp(*n->val);
+        Board::err_disp(*n->val);
         steps++;
         n = n->parent;
     }
-    std::cerr << "\n\033[32msteps : " << steps << "\033[0m" << std::endl;
+    std::cerr << "\n\033[32;4msteps : " << steps << "\033[0m" << std::endl;
     return steps;
 };
 bool Board::search_for_answer(Node *cu_node)
@@ -190,7 +199,7 @@ bool Board::search_for_answer(Node *cu_node)
         if (check_if_is_answer(*cu_node->val))
         {
             current_node = cu_node;
-            std::cerr << "yes khodesh" << std::endl;
+            // std::cerr << "yes khodesh" << std::endl;
             show_path(current_node);
             return 1;
         }
@@ -208,7 +217,7 @@ bool Board::search_for_answer(Node *cu_node)
         all_record.insert(this->make_str(*cu_node->up->val));
         if (check_if_is_answer(*cu_node->up->val))
         {
-            std::cerr << "yes up" << std::endl;
+            // std::cerr << "yes up" << std::endl;
             current_node =  current_node->up;
             show_path(current_node);
 
@@ -225,7 +234,7 @@ bool Board::search_for_answer(Node *cu_node)
 
         if (check_if_is_answer(*cu_node->down->val))
         {
-            std::cerr << "yes down" << std::endl;
+            // std::cerr << "yes down" << std::endl;
             current_node =  current_node->down;
             
             show_path(current_node);
@@ -239,7 +248,7 @@ bool Board::search_for_answer(Node *cu_node)
         if (check_if_is_answer(*cu_node->right->val))
         {
             std::cout << "here?9" << std::endl;
-            std::cerr << "yes right" << std::endl;
+            // std::cerr << "yes right" << std::endl;
             current_node =  current_node->right;
 
             show_path(current_node);
@@ -256,7 +265,7 @@ bool Board::search_for_answer(Node *cu_node)
         all_record.insert(this->make_str(*cu_node->left->val));
         if (check_if_is_answer(*cu_node->left->val))
         {
-            std::cerr << "yes left" << std::endl;
+            // std::cerr << "yes left" << std::endl;
             current_node = cu_node->left;
             show_path(current_node);
             return 1;

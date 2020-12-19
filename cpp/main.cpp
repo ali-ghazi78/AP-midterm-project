@@ -1,7 +1,7 @@
 #include <iostream>
 #include "board.h"
 #include <algorithm>
-// void brute_force_test();
+void brute_force_test();
 
 int main()
 {
@@ -14,42 +14,38 @@ int main()
 
     std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
     Board a = Board(init_vec);
-    // std::vector<std::shared_ptr<Board::Node>> ve;
-    bool done = false;
-    Board::Node * temp =a.head;
-    while(!done)
-    {
-        done = a.search_for_answer(a.current_node);
-    }
+    // a.loop();
+    brute_force_test();
+
     std::cerr << "\033[35m"
               << "bye"
               << "\033[0m" << std::endl;
     return 0;
 }
 
-// void brute_force_test()
-// {
-//     size_t i = 100;
-//     std::vector<int> init_vec = {1, 2, 3, 4, 5, 6, 7, 8, 0};
-//     while (i--)
-//     {
-//         std::random_shuffle(init_vec.begin(), init_vec.end());
-//         Board a = Board(init_vec);
-//         if (a.is_solvable(init_vec))
-//         {
-//             a.search_for_answer(a.head);
-//             a.disp(init_vec);
-//         }
-//         else
-//         {
-//             std::cerr << "\033[4;31m"
-//                       << "not solvable"
-//                       << "\033[0m" << std::endl;
-//         }
-//         std::cerr << "\033[34m"
-//                   << "i: " << i << std::endl;
-//     }
-// }
+void brute_force_test()
+{
+    size_t i = 100;
+    std::vector<int> init_vec = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+    while (i--)
+    {
+        std::random_shuffle(init_vec.begin(), init_vec.end());
+        Board a = Board(init_vec);
+        if (a.is_solvable(init_vec))
+        {
+            a.loop();
+            a.disp(init_vec);
+        }
+        else
+        {
+            std::cerr << "\033[4;31m"
+                      << "not solvable"
+                      << "\033[0m" << std::endl;
+        }
+        std::cerr << "\033[34m"
+                  << "i: " << i << std::endl;
+    }
+}
 
 
 

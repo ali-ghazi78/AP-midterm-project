@@ -42,6 +42,7 @@ public:
     bool is_solvable(const std::vector<int> &v);
     std::string make_str(const std::vector<int> &v);
     static void err_disp(const std::vector<int> &v);
+    void loop();
 };
 
 #endif
