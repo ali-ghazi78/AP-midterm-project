@@ -1,8 +1,13 @@
 #include <iostream>
 #include "board.h"
 #include <algorithm>
+#include <menu.h>
 void brute_force_test();
-
+void find_solo(){
+    std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
+    Board a = Board(init_vec);
+    a.loop();
+}
 int main()
 {
 
@@ -10,13 +15,8 @@ int main()
               << "hello there"
               << "\033[0m" << std::endl;
 
-    // std::vector<int> init_vec = {1, 2, 3,  0,4,5, 6, 7, 8};
-
-    std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    Board a = Board(init_vec);
-    // a.loop();
-    brute_force_test();
-
+    while(true)
+        menu_loop();
     std::cerr << "\033[35m"
               << "bye"
               << "\033[0m" << std::endl;
