@@ -14,21 +14,17 @@ void Board::loop()
 }
 Board::Board(std::vector<int> val)
 {
+    randome_or_costume = true; //true means random
     head = new Node(move(val));
     current_node = head;
     head->parent = nullptr;
     search_queue.push(head);
     all_record.insert(make_str(val));
-
-    // head->disp(*(head->val));
 }
 size_t Board::Node::Node_no = 0;
 
 Board::Node::~Node()
 {
-    // if (Node::Node_no % 1000 == 0)
-    //     std::cerr << "Node destructor:" << Node::Node_no << std::endl;
-
     Node::Node_no--;
     up = nullptr;
     right = nullptr;
@@ -49,15 +45,10 @@ Board::Node::Node(const std::vector<int> &initial_state)
 
 void Board::move_zero(std::vector<int> &vec1, int x, int y, int loc)
 {
-    // std::cout << "h34" << std::endl;
-    // std::cout << x << y << loc << std::endl;
-
     std::swap(vec1[loc], vec1[x + y * 3]);
-    // std::cout << "h35" << std::endl;
 }
 void Board::make_adjacent_nodes(const std::vector<int> &current_node)
 {
-    // std::cout << "h1" << std::endl;
     auto p = std::find(current_node.begin(), current_node.end(), 0);
     int loc = p - current_node.begin();
     int x = p - current_node.begin();
@@ -348,14 +339,23 @@ void Board::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
     std::cout << Color::color_red << "\t  " << std::string(7, '-') << std::endl;
     for (int i = 0; i < 3; i++)
     {
-        std::cout << Color::color_red<<Color::non_italic << "\t | ";
+        std::cout << Color::color_red << Color::non_italic << "\t | ";
 
         for (size_t j = 0; j < 3; j++)
         {
-            if (i1 == i * 3 + j)
+            if (i1 == i2 && i2 == i * 3 + j)
             {
-                if (i != 2 && i2 == i1+1)
-                    std::cout << Color::color_reset << Color::color_red_b << " " << " " << Color::color_reset;
+                std::cout << Color::color_reset << Color::color_red_b << " " << Color::color_reset << " ";
+            }
+            else if (v[i * 3 + j] == -1)
+            {
+                std::cout << Color::color_reset << Color::color_blue_b << " " << Color::color_reset << " ";
+            }
+            else if (i1 == i * 3 + j)
+            {
+                if (j != 2 && i2 == i1 + 1)
+                    std::cout << Color::color_reset << Color::color_red_b << " "
+                              << " " << Color::color_reset;
                 else
                     std::cout << Color::color_reset << Color::color_red_b << " " << Color::color_reset << " ";
             }
@@ -369,7 +369,7 @@ void Board::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
             else
                 std::cout << Color::color_blue << v[i * 3 + j] << " ";
         }
-        std::cout << Color::color_red<<Color::non_italic << "|";
+        std::cout << Color::color_red << Color::non_italic << "|";
 
         std::cout << std::endl;
     }

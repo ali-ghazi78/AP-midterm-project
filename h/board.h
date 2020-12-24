@@ -32,7 +32,7 @@ public:
     std::vector<std::vector<int>> final_val;
     Node *head;
     Node *current_node;
-   
+    bool randome_or_costume ;
     void make_adjacent_nodes(const std::vector<int> &current_node);
     void move_zero(std::vector<int> &vec1, int x, int y, int loc);
     void disp();
