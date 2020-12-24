@@ -14,7 +14,7 @@ int main()
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-
+    
     while(true)
         menu_loop();
     std::cerr << "\033[35m"

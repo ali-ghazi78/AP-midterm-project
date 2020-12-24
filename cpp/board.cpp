@@ -172,7 +172,7 @@ size_t Board::show_path(Board::Node *n)
     }
     std::reverse(final_val.begin(), final_val.end());
     std::cerr << "\n\033[32;4msteps : " << steps << "\033[0m" << std::endl;
-    return steps;
+    return steps-1;
 }
 bool Board::search_for_answer(Node *cu_node)
 {
