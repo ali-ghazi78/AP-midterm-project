@@ -2,8 +2,10 @@
 #include "board.h"
 #include <algorithm>
 #include <menu.h>
+#include <bls.h>
 void brute_force_test();
-void find_solo(){
+void find_solo()
+{
     std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
     Board a = Board(init_vec);
     a.loop();
@@ -14,13 +16,22 @@ int main()
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-    
-    while(true)
-        menu_loop();
-    std::cerr << "\033[35m"
-              << "bye"
-              << "\033[0m" << std::endl;
-    return 0;
+    std::vector<int> init_vec = {1, 2, 3,0, 4, 5, 6,  7,8};
+    // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
+
+    // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
+    BLS t = BLS(init_vec);
+    t.loop();
+    std::vector<std::vector<int>> result = t.final_val;
+    t.disp_in_menu(*t.current_node->val,*t.current_node->val);
+
+            // while(true)
+            //     menu_loop();
+
+            std::cerr << "\033[35m"
+                      << "bye"
+                      << "\033[0m" << std::endl;
+            return 0;
 }
 
 void brute_force_test()
@@ -47,13 +58,6 @@ void brute_force_test()
     }
 }
 
-
-
-
-
-
-
-
 // int main()
 // {
 
@@ -77,7 +81,6 @@ void brute_force_test()
 //         delete ve[i];
 //         ve[i] = nullptr ;
 //     }
-    
 
 //     return 0;
 // }

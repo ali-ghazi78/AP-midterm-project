@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -std=c++2a -Wall -I./h -c 
-LXXFLAGS = -std=c++2a -I./h -pthread
-OBJECTS = ./obj/main.o ./obj/board.o ./obj/menu.o  
+CXXFLAGS = -std=c++2a -Wall -I./h -o4 -c 
+LXXFLAGS = -std=c++2a -I./h -o4 -pthread
+OBJECTS = ./obj/main.o ./obj/board.o ./obj/menu.o ./obj/bls.o   
 TARGET = main
 
 
@@ -13,8 +13,8 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) ./cpp/board.cpp -o ./obj/board.o
 ./obj/menu.o: ./cpp/menu.cpp ./h/menu.h
 	$(CXX) $(CXXFLAGS) ./cpp/menu.cpp -o ./obj/menu.o
-# ./obj/color.o:  ./h/color.h
-# 	$(CXX) $(CXXFLAGS) ./cpp/color.cpp -o ./obj/color.o
+./obj/bls.o:  ./h/bls.h
+	$(CXX) $(CXXFLAGS) ./cpp/bls.cpp -o ./obj/bls.o
 
 clean:
 	rm -fv $(TARGET) $(OBJECTS)
