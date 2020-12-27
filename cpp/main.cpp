@@ -10,28 +10,50 @@ void find_solo()
     Board a = Board(init_vec);
     a.loop();
 }
+
 int main()
 {
 
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-    std::vector<int> init_vec = {1, 2, 3,0, 4, 5, 6,  7,8};
+    // std::vector<int> init_vec = {1, 2, 3, 4, 5, 6,0,  7,8};
+    std::vector<int> init_vec5 = {2, 4, 6, 5, 8, 3, 0, 1, 7};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-
+    std::vector<int> init_vec1 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
+    std::vector<int> init_vec2 = {2, 3, 0, 1, 5, 6, 4, 7, 8};
+    std::vector<int> init_vec3 = {1, 2, 3, 4, 6, 8, 7, 5, 0};
+    std::vector<int> init_vec4 = {1, 2, 3, 0, 5, 6, 4, 7, 8};
+    std::vector<std::vector<int>> vv{init_vec1, init_vec2, init_vec3, init_vec4,init_vec5};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    BLS t = BLS(init_vec);
-    t.loop();
-    std::vector<std::vector<int>> result = t.final_val;
-    t.disp_in_menu(*t.current_node->val,*t.current_node->val);
+    int m = 5;
+    bool done=false;
+    for (int i = 4; m<30 && !done ; )
+    {
+        BLS t = BLS(vv[i]);
+        t.max_depth=m;
+        m+=5;
+        t.disp_in_menu(*t.current_node->val, *t.current_node->val);
+        int a = 0;
+        if (t.is_solvable(vv[i], a)){
+            done = t.loop();
+            std::cerr << "return : " <<done<< std::endl;
+        }
+        else
+        {
+            std::cerr << "fuck u " << std::endl;
+        }
+        std::vector<std::vector<int>> result = t.final_val;
+        // t.disp_in_menu(*t.current_node->val, *t.current_node->val);
+    }
 
-            // while(true)
-            //     menu_loop();
+    // while(true)
+    //     menu_loop();
 
-            std::cerr << "\033[35m"
-                      << "bye"
-                      << "\033[0m" << std::endl;
-            return 0;
+    std::cerr << "\033[35m"
+              << "bye"
+              << "\033[0m" << std::endl;
+    return 0;
 }
 
 void brute_force_test()

@@ -281,7 +281,7 @@ bool Board::search_for_answer(Node *cu_node)
 
     // if (search_queue.size() < 100000 && search_queue.size() != 0)
     // {
-    //     search_for_answer(cu_node);
+    //     search_for__answer(cu_node);
     // }
     // if (Board::Node::Node_no % 1000 == 0)
     // std::cerr << "Done" << Board::Node::Node_no << std::endl;

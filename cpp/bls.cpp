@@ -3,25 +3,27 @@
 #include <vector>
 #include <string>
 #include <cmath>
-
-void BLS::loop()
+#include <color.h>
+bool BLS::loop()
 {
-    bool done = false;
+    int done = 0;
+
     int c = 400000;
-    while (!done && c--)
+    while (done==0)
     {
         done = search_for_answer(current_node);
-        disp_in_menu(*current_node->val, *current_node->val);
     }
+    return done%2;//2 means not found also 0
 }
 BLS::BLS(std::vector<int> val)
 {
+    max_depth = 10;
     randome_or_costume = true; //true means random
     head = new Node(move(val));
     current_node = head;
     head->parent = nullptr;
     search_queue.push(head);
-    all_record.insert(make_str(val));
+    all_record.insert(make_str(current_node));
 }
 size_t BLS::Node::Node_no = 0;
 
@@ -43,6 +45,7 @@ BLS::Node::Node(const std::vector<int> &initial_state)
     down = nullptr;
     parent = nullptr;
     Node::Node_no++;
+    unique_num = Node::Node_no;
 }
 
 void BLS::move_zero(std::vector<int> &vec1, int x, int y, int loc)
@@ -70,7 +73,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> up = current_node;
         move_zero(up, x_up, y_up, loc);
-        if (all_record.count(make_str(up)) == 0)
+        if (all_record.count(make_str(this->current_node, up)) == 0)
         {
             this->current_node->up = new Node(move(up));
             all_address_to_del.push_back(this->current_node->up);
@@ -87,7 +90,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> down = current_node;
         move_zero(down, x_down, y_down, loc);
-        if (all_record.count(make_str(down)) == 0)
+        if (all_record.count(make_str(this->current_node, down)) == 0)
         {
             this->current_node->down = new Node(move(down));
             all_address_to_del.push_back(this->current_node->down);
@@ -104,7 +107,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> right = current_node;
         move_zero(right, x_right, y_right, loc);
-        if (all_record.count(make_str(right)) == 0)
+        if (all_record.count(make_str(this->current_node, right)) == 0)
         {
             this->current_node->right = new Node(move(right));
             all_address_to_del.push_back(this->current_node->right);
@@ -121,7 +124,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> left = current_node;
         move_zero(left, x_left, y_left, loc);
-        if (all_record.count(make_str(left)) == 0)
+        if (all_record.count(make_str(this->current_node, left)) == 0)
         {
             this->current_node->left = new Node(move(left));
             all_address_to_del.push_back(this->current_node->left);
@@ -154,17 +157,17 @@ size_t BLS::show_path(BLS::Node *n)
     std::cerr << "\n\033[32;4msteps : " << steps << "\033[0m" << std::endl;
     return steps - 1;
 }
-bool BLS::search_for_answer(Node *cu_node)
+int BLS::search_for_answer(Node *cu_node)
 {
 
     disp(*cu_node->val);
     current_node = cu_node;
 
-    std::cout << "make adjacnet" << std::endl;
+    // std::cout << "make adjacnet" << std::endl;
 
     make_adjacent_nodes(*(cu_node->val));
 
-    std::cout << "adjacent done!" << std::endl;
+    // std::cout << "adjacent done!" << std::endl;
 
     std::vector<int> s(4, 65535);
     int choose = -1;
@@ -204,25 +207,26 @@ bool BLS::search_for_answer(Node *cu_node)
     }
     else
     {
-        std::cerr << "current node = 0 " << std::endl;
+        // std::cerr << "current node = 0 " << std::endl;
         return 1;
     }
 
     choose = -1;
     if (cu_node->up != nullptr && 1)
     {
-        if (all_record.count(make_str(*cu_node->up->val)) == 0)
+        if (all_record.count(make_str(cu_node->up)) == 0)
         {
-            std::cout << "up?" << std::endl;
+            // disp_in_menu(*cu_node->up->val, *cu_node->val);
+            // std::cout << "up?" << std::endl;
             search_queue.push(cu_node->up);
-            all_record.insert(this->make_str(*cu_node->up->val));
+            all_record.insert(this->make_str(cu_node->up));
             choose = 0;
         }
         else
         {
             choose = -1;
         }
-        
+
         if (check_if_is_answer(*cu_node->up->val))
         {
             // std::cerr << "yes up" << std::endl;
@@ -232,38 +236,42 @@ bool BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    if (cu_node->down != nullptr && choose==-1)
+    if (cu_node->down != nullptr && choose == -1)
     {
-        std::cout << "donw?" << std::endl;
+        // std::cout << "down?" << std::endl;
 
-        if (all_record.count(make_str(*cu_node->down->val)) == 0)
+        if (all_record.count(make_str(cu_node->down)) == 0)
         {
+            // disp_in_menu(*cu_node->down->val, *cu_node->val);
             search_queue.push(cu_node->down);
-            all_record.insert(this->make_str(*cu_node->down->val));
+            all_record.insert(this->make_str(cu_node->down));
             choose = 0;
         }
-        else 
+        else
             choose = -1;
         if (check_if_is_answer(*cu_node->down->val))
         {
-            // std::cerr << "yes down" << std::endl;
+            std::cerr << "yes down" << std::endl;
             current_node = current_node->down;
 
             show_path(current_node);
             return 1;
         }
     }
-     if (cu_node->right != nullptr && choose == -1)
+    if (cu_node->right != nullptr && choose == -1)
     {
-        std::cout << "right" << std::endl;
-        if (all_record.count(make_str(*cu_node->right->val)) == 0)
+        // std::cout << "right" << std::endl;
+        if (all_record.count(make_str(cu_node->right)) == 0)
         {
+            // disp_in_menu(*cu_node->right->val, *cu_node->val);
             search_queue.push(cu_node->right);
-            all_record.insert(this->make_str(*cu_node->right->val));
+            all_record.insert(this->make_str(cu_node->right));
             choose = 0;
         }
-        else 
+        else
+        {
             choose = -1;
+        }
         if (check_if_is_answer(*cu_node->right->val))
         {
             // std::cout << "here?9" << std::endl;
@@ -275,19 +283,20 @@ bool BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    // std::cout << "here?8" << std::endl;
-
-     if (cu_node->left != nullptr && choose==-1)
+    if (cu_node->left != nullptr && choose == -1)
     {
-        std::cout << "left" << std::endl;
-        if (all_record.count(make_str(*cu_node->left->val)) == 0)
+        // std::cout << "left" << std::endl;
+        if (all_record.count(make_str(cu_node->left)) == 0)
         {
+            // disp_in_menu(*cu_node->left->val, *cu_node->val);
             search_queue.push(cu_node->left);
-            all_record.insert(this->make_str(*cu_node->left->val));
+            all_record.insert(this->make_str(cu_node->left));
             choose = 0;
         }
-        else 
+        else
+        {
             choose = -1;
+        }
         if (check_if_is_answer(*cu_node->left->val))
         {
             // std::cerr << "yes left" << std::endl;
@@ -296,19 +305,18 @@ bool BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    if (search_queue.size() >= 1 && choose==-1)
+    if ((search_queue.size() >= 1 && choose == -1) || search_queue.size() >= max_depth)
+    {
         search_queue.pop();
-
-    // std::cerr << "sizeis: " << search_queue.size() << std::endl;
-    // if (BLS::Node::Node_no % 1000 == 0)
-    //     std::cerr << "no of Nodes :" << BLS::Node::Node_no << std::endl;
+        // std::cerr << "searchque size " << search_queue.size() << std::endl;
+    }
 
     if (search_queue.size() >= 1)
         cu_node = search_queue.top();
     else
     {
         std::cerr << "no Node reamained" << BLS::Node::Node_no << std::endl;
-        return 1;
+        return 2;
     }
     current_node = cu_node;
 
@@ -316,8 +324,8 @@ bool BLS::search_for_answer(Node *cu_node)
     // {
     //     search_for_answer(cu_node);
     // }
-    // if (BLS::Node::Node_no % 1000 == 0)
-    std::cerr << "node_no" << BLS::Node::Node_no << std::endl;
+    if (BLS::Node::Node_no % 1000 == 0)
+        std::cerr << Color::color_blue << "node_no" << BLS::Node::Node_no << std::endl;
 
     return 0;
 }
@@ -338,13 +346,39 @@ bool BLS::is_solvable(const std::vector<int> &v, int &inver)
         return (inver % 2 + 1) % 2;
     return inver % 2;
 }
-std::string BLS::make_str(const std::vector<int> &v)
+std::string BLS::make_str(Node *n, std::vector<int> vec)
 {
     std::string s = "";
+    std::vector<std::string> all;
+    if (vec[0] == -1)
+        vec = *n->val;
     for (int i = 0; i < 9; i++)
     {
-        s.append(std::to_string(v[i]));
+        s.append(std::to_string(vec[i]));
     }
+    // s.append("-");
+
+    n = n->parent;
+    while (n != nullptr && std::count(all.begin(), all.end(), s) == 0)
+    {
+        std::string a;
+        for (int i = 0; i < 9; i++)
+        {
+            a.append(std::to_string((*n->val)[i]));
+        }
+        all.push_back(a);
+        // s.append("-");
+        n = n->parent;
+    }
+    // std::reverse(all.begin(),all.end());
+    if (std::count(all.begin(), all.end(), s) == 0)
+        all.push_back(s);
+    s = "";
+    for (size_t j = 0; j < all.size(); j++)
+    {
+        s = s + all[j];
+    }
+    // std::cerr << "ID:" << s << std::endl;
     return s;
 }
 void BLS::err_disp(const std::vector<int> &v)
