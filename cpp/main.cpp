@@ -18,37 +18,37 @@ int main()
               << "hello there"
               << "\033[0m" << std::endl;
     // std::vector<int> init_vec = {1, 2, 3, 4, 5, 6,0,  7,8};
-    std::vector<int> init_vec5 = {2, 4, 6, 5, 8, 3, 0, 1, 7};
+    std::vector<int> init_vec1 = {7, 1, 5, 8, 3, 2, 4,0, 6};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    std::vector<int> init_vec1 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
+    std::vector<int> init_vec5 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
     std::vector<int> init_vec2 = {2, 3, 0, 1, 5, 6, 4, 7, 8};
     std::vector<int> init_vec3 = {1, 2, 3, 4, 6, 8, 7, 5, 0};
     std::vector<int> init_vec4 = {1, 2, 3, 0, 5, 6, 4, 7, 8};
     std::vector<std::vector<int>> vv{init_vec1, init_vec2, init_vec3, init_vec4,init_vec5};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    int m = 5;
+    int m = 17;
     bool done=false;
-    for (int i = 4; m<30 && !done ; )
-    {
-        BLS t = BLS(vv[i]);
+        // while(true)
+        // menu_loop();
+        Board bb (init_vec1);
+            std::cerr << "return : " <<bb.loop()<< std::endl;
+    
+        BLS t = BLS(init_vec1);
         t.max_depth=m;
-        m+=5;
         t.disp_in_menu(*t.current_node->val, *t.current_node->val);
         int a = 0;
-        if (t.is_solvable(vv[i], a)){
+        if (t.is_solvable(init_vec1, a)){
             done = t.loop();
             std::cerr << "return : " <<done<< std::endl;
         }
         else
         {
-            std::cerr << "fuck u " << std::endl;
+            std::cerr << "not solvable " << std::endl;
         }
         std::vector<std::vector<int>> result = t.final_val;
         // t.disp_in_menu(*t.current_node->val, *t.current_node->val);
-    }
 
-    // while(true)
-    //     menu_loop();
+
 
     std::cerr << "\033[35m"
               << "bye"

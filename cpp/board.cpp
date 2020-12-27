@@ -4,13 +4,14 @@
 #include <string>
 #include <cmath>
 
-void Board::loop()
+int Board::loop()
 {
     bool done = false;
     while (!done)
     {
         done = search_for_answer(current_node);
     }
+    return final_val.size();
 }
 Board::Board(std::vector<int> val)
 {

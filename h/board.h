@@ -44,7 +44,7 @@ public:
     void disp_in_menu(const std::vector<int> &v,const std::vector<int> &v2);
     std::string make_str(const std::vector<int> &v);
     size_t show_path(Board::Node *n);
-    void loop();
+    int loop();
 
 };
 

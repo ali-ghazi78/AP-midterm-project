@@ -7,8 +7,6 @@
 bool BLS::loop()
 {
     int done = 0;
-
-    int c = 400000;
     while (done==0)
     {
         done = search_for_answer(current_node);
