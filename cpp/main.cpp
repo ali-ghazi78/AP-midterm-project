@@ -17,19 +17,19 @@ int main()
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-    // std::vector<int> init_vec = {1, 2, 3, 4, 5, 6,0,  7,8};
-    std::vector<int> init_vec1 = {7, 1, 5, 8, 3, 2, 4,0, 6};
+        // while(true)
+        // menu_loop();
+    std::vector<int> init_vec = {8, 0, 3, 4, 6, 1,5,  7,2};
+    std::vector<int> init_vec5 = {7, 1, 5, 8, 3, 2, 4,0, 6};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    std::vector<int> init_vec5 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
+    std::vector<int> init_vec1 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
     std::vector<int> init_vec2 = {2, 3, 0, 1, 5, 6, 4, 7, 8};
     std::vector<int> init_vec3 = {1, 2, 3, 4, 6, 8, 7, 5, 0};
     std::vector<int> init_vec4 = {1, 2, 3, 0, 5, 6, 4, 7, 8};
     std::vector<std::vector<int>> vv{init_vec1, init_vec2, init_vec3, init_vec4,init_vec5};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    int m = 17;
+    int m = 22;
     bool done=false;
-        // while(true)
-        // menu_loop();
         Board bb (init_vec1);
             std::cerr << "return : " <<bb.loop()<< std::endl;
     
@@ -46,7 +46,7 @@ int main()
             std::cerr << "not solvable " << std::endl;
         }
         std::vector<std::vector<int>> result = t.final_val;
-        // t.disp_in_menu(*t.current_node->val, *t.current_node->val);
+        t.disp_in_menu(*t.current_node->val, *t.current_node->val);
 
 
 

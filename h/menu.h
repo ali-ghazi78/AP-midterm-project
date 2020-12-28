@@ -37,23 +37,32 @@ bool solve_dfs(std::vector<int> init_vec)
         std::random_shuffle(init_vec.begin(), init_vec.end());
     }
     Board b(init_vec);
-    b.disp_in_menu(init_vec,init_vec);
+    std::cout << Color::color_green << "please be patient we are solving the following puzzle ... " << std::endl;
+    b.disp_in_menu(init_vec, init_vec);
     int bfs_min_dep = b.loop();
-    std::cout << Color::color_blue << " minimum depth that is requierd to solve the puzzel is :" <<Color::color_red<<bfs_min_dep<< std::endl;
+    std::cout << Color::color_blue << "minimum depth that is requierd to solve the puzzel is: " << Color::color_red << bfs_min_dep << std::endl;
+    std::cout << Color::color_green << "but u can choose ur desire depth" << std::endl;
     std::cout << Color::color_green << "please enter ur depth :" << std::endl;
-    std::string ss = my_cin();
-    int depth = is_number(ss);
-    if (depth < 0)
-        depth = 0;
-
-
-    if (bfs_min_dep> depth)
+    std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+    int depth = 0;
+    while (depth <= 0)
+    {
+        std::string ss = my_cin();
+        depth = is_number(ss);
+        if (depth < 0)
+        {
+            std::cout << Color::color_red << "invalid input try again" << std::endl;
+            std::cout << Color::color_green << "please enter ur depth :" << std::endl;
+            std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+        }
+    }
+    if (bfs_min_dep > depth)
     {
 
-        std::cout << Color::color_red << "you entered :" <<depth<< std::endl;
-        std::cout << Color::color_red << "but minimum depth that is requierd to solve the puzzel is :" <<bfs_min_dep<< std::endl;
-        std::cout << Color::color_red << "we are sorry but it is not solvable with specified depth" << std::endl;
-        
+        std::cout << Color::color_red << "you entered :" << depth << std::endl;
+        std::cout << Color::color_red << "but minimum depth that is requierd to solve the puzzel is :" << bfs_min_dep << std::endl;
+        std::cout << Color::color_red << "we are sorry but it is impossible to solve the puzzle using given input " << std::endl;
+
         return 0;
     }
 
@@ -75,6 +84,12 @@ bool solve_dfs(std::vector<int> init_vec)
 
         if (s == "b" || s == "B")
             return 0;
+    }
+    for (int i = 0; i < result.size(); i++)
+    {
+        std::cout << Color::color_green << "step:" << i << "/" << result.size() - 1 << std::endl;
+        if (i + 1 < result.size())
+            a.disp_in_menu(result[i], result[i + 1]);
     }
     if (result.size() == 0)
         std::cout << Color::color_red << "we are sorry but it is not solvable with specified depth" << std::endl;
@@ -144,9 +159,9 @@ bool show_random()
         clear();
         if (s != "1" && s != "2" && s != "")
             std::cout << Color::color_red << "invalid input try again" << std::endl;
-        std::cout << Color::color_green << "enter  (1) if u want to use BFS" << std::endl;
-        std::cout << Color::color_green << "enter  (2) if u want to use DFS" << std::endl;
-        std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+        std::cout << Color::color_green << "enter  (1)  if u want to use BFS" << std::endl;
+        std::cout << Color::color_green << "enter  (2)  if u want to use DFS" << std::endl;
+        std::cout << Color::color_blue << "enter  (b)  to exit " << std::endl;
         s = my_cin();
         if (s == "b" || s == "B")
             return 0;
