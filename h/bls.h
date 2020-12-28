@@ -24,18 +24,21 @@ public:
         Node* left;
         Node* parent;
         size_t unique_num;
+        size_t number_of_parent;
+        void set_parent_number();
 
     };
     BLS(std::vector<int> val);
     BLS()=default;
     size_t max_depth ;
     std::stack<Node *> search_queue;
-    std::set<std::string> all_record;
+    std::vector<std::string> all_record;
     std::vector<Node *> all_address_to_del;
     std::vector<std::vector<int>> final_val;
     Node *head;
     Node *current_node;
     bool randome_or_costume ;
+    int my_find(std::string s);
     void make_adjacent_nodes(const std::vector<int> &current_node);
     void move_zero(std::vector<int> &vec1, int x, int y, int loc);
     void disp();

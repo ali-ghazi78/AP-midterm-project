@@ -17,12 +17,12 @@ int main()
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-        while(true)
-        menu_loop();
-    std::vector<int> init_vec = {8, 0, 3, 4, 6, 1,5,  7,2};
-    std::vector<int> init_vec5 = {7, 1, 5, 8, 3, 2, 4,0, 6};
-    // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    std::vector<int> init_vec1 = {1, 2, 3, 4, 6, 8, 0, 7, 5};
+        // while(true)
+        // menu_loop();
+    std::vector<int> init_vec1 = {8, 0, 3, 4, 6, 1,5,  7,2};
+    std::vector<int> init_vec33 = {7, 1, 5, 8, 3, 2, 4,0, 6};
+    std::vector<int> init_vec5 = {2, 4, 6, 5, 8, 3, 0, 1, 7};
+    std::vector<int> init_vec = {1, 2, 3, 4, 6, 8, 0, 7, 5};
     std::vector<int> init_vec2 = {2, 3, 0, 1, 5, 6, 4, 7, 8};
     std::vector<int> init_vec3 = {1, 2, 3, 4, 6, 8, 7, 5, 0};
     std::vector<int> init_vec4 = {1, 2, 3, 0, 5, 6, 4, 7, 8};

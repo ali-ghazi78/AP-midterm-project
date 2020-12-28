@@ -45,6 +45,10 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "set": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "bitset": "cpp",
+        "cstring": "cpp",
+        "map": "cpp",
+        "regex": "cpp"
     }
 }

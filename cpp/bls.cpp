@@ -7,13 +7,13 @@
 bool BLS::loop()
 {
     int done = 0;
-    int c = 5;
-    while (done == 0 )
+    int c = 200;
+    while (done == 0)
     {
         done = search_for_answer(current_node);
         // disp_in_menu(*current_node->val, *current_node->val);
-        // std::cerr << make_str(current_node) << "^" << std::endl
-                //   << std::string(20, '-') << std::endl;
+        // std::cerr << make_str(current_node) << "^" << std::endl;
+        //   << std::string(20, '-') << std::endl;
     }
     return done % 2; //2 means not found also 0
 }
@@ -25,7 +25,7 @@ BLS::BLS(std::vector<int> val)
     current_node = head;
     head->parent = nullptr;
     search_queue.push(head);
-    all_record.insert(make_str(current_node));
+    all_record.push_back(make_str(current_node));
 }
 size_t BLS::Node::Node_no = 0;
 
@@ -48,8 +48,14 @@ BLS::Node::Node(const std::vector<int> &initial_state)
     parent = nullptr;
     Node::Node_no++;
     unique_num = Node::Node_no;
+    number_of_parent = 0;
 }
-
+void BLS::Node::set_parent_number()
+{
+    Node *n = this;
+    number_of_parent = n->parent->number_of_parent;
+    number_of_parent++;
+}
 void BLS::move_zero(std::vector<int> &vec1, int x, int y, int loc)
 {
     std::swap(vec1[loc], vec1[x + y * 3]);
@@ -75,70 +81,66 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> up = current_node;
         move_zero(up, x_up, y_up, loc);
-        if (all_record.count(make_str(this->current_node, up)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, up)) == 0)
         {
             this->current_node->up = new Node(move(up));
             all_address_to_del.push_back(this->current_node->up);
             if (this->current_node->up != nullptr)
+            {
                 this->current_node->up->parent = this->current_node;
-        }
-        else
-        {
-            // this->current_node->up = nullptr;
-            resume = true;
+                this->current_node->up->set_parent_number();
+            }
         }
     }
     if (y_down != -1)
     {
         std::vector<int> down = current_node;
         move_zero(down, x_down, y_down, loc);
-        if (all_record.count(make_str(this->current_node, down)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, down)) == 0)
         {
             // std::cerr << "makeing dow" << make_str(this->current_node, down) << std::endl;
 
             this->current_node->down = new Node(move(down));
             all_address_to_del.push_back(this->current_node->down);
             if (this->current_node->down != nullptr)
+            {
                 this->current_node->down->parent = this->current_node;
-        }
-        else
-        {
-            // this->current_node->down = nullptr;
-            resume = true;
+                this->current_node->down->set_parent_number();
+            }
         }
     }
     if (x_right != -1)
     {
         std::vector<int> right = current_node;
         move_zero(right, x_right, y_right, loc);
-        if (all_record.count(make_str(this->current_node, right)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, right)) == 0)
         {
             this->current_node->right = new Node(move(right));
             all_address_to_del.push_back(this->current_node->right);
             if (this->current_node->right != nullptr)
+            {
                 this->current_node->right->parent = this->current_node;
+                this->current_node->right->set_parent_number();
+            }
         }
-        else
-        {
-            // this->current_node->right = nullptr;
-            resume = true;
-        }
+        
     }
     if (x_left != -1)
     {
         std::vector<int> left = current_node;
         move_zero(left, x_left, y_left, loc);
-        if (all_record.count(make_str(this->current_node, left)) == 0)
+
+        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, left)) == 0)
         {
             this->current_node->left = new Node(move(left));
             all_address_to_del.push_back(this->current_node->left);
             if (this->current_node->left != nullptr)
+            {
                 this->current_node->left->parent = this->current_node;
+                this->current_node->left->set_parent_number();
+            }
         }
-        else
-        {
-            // this->current_node->left = nullptr;
-        }
+        
     }
 }
 
@@ -176,12 +178,12 @@ int BLS::search_for_answer(Node *cu_node)
     int choose = -1;
     if (cu_node->up != nullptr && 1)
     {
-        if (all_record.count(make_str(cu_node->up)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->up)) == 0)
         {
             // disp_in_menu(*cu_node->up->val, *cu_node->val);
             // std::cout << "up?" << std::endl;
             search_queue.push(cu_node->up);
-            all_record.insert(this->make_str(cu_node->up));
+            all_record.push_back(this->make_str(cu_node->up));
             choose = 0;
         }
         else
@@ -202,11 +204,11 @@ int BLS::search_for_answer(Node *cu_node)
     {
         // std::cout << "down?" << std::endl;
 
-        if (all_record.count(make_str(cu_node->down)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->down)) == 0)
         {
             // disp_in_menu(*cu_node->down->val, *cu_node->val);
             search_queue.push(cu_node->down);
-            all_record.insert(this->make_str(cu_node->down));
+            all_record.push_back(this->make_str(cu_node->down));
             choose = 0;
         }
         else
@@ -223,11 +225,11 @@ int BLS::search_for_answer(Node *cu_node)
     if (cu_node->right != nullptr && choose == -1)
     {
         // std::cout << "right" << std::endl;
-        if (all_record.count(make_str(cu_node->right)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->right)) == 0)
         {
             // disp_in_menu(*cu_node->right->val, *cu_node->val);
             search_queue.push(cu_node->right);
-            all_record.insert(this->make_str(cu_node->right));
+            all_record.push_back(this->make_str(cu_node->right));
             choose = 0;
         }
         else
@@ -248,11 +250,11 @@ int BLS::search_for_answer(Node *cu_node)
     if (cu_node->left != nullptr && choose == -1)
     {
         // std::cout << "left" << std::endl;
-        if (all_record.count(make_str(cu_node->left)) == 0)
+        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->left)) == 0)
         {
             // disp_in_menu(*cu_node->left->val, *cu_node->val);
             search_queue.push(cu_node->left);
-            all_record.insert(this->make_str(cu_node->left));
+            all_record.push_back(this->make_str(cu_node->left));
             choose = 0;
         }
         else
@@ -277,7 +279,7 @@ int BLS::search_for_answer(Node *cu_node)
         cu_node = search_queue.top();
     else
     {
-        // std::cerr << "no Node reamained" << BLS::Node::Node_no << std::endl;
+        std::cerr << "no Node reamained" << BLS::Node::Node_no << std::endl;
         return 2;
     }
     current_node = cu_node;
@@ -308,48 +310,63 @@ bool BLS::is_solvable(const std::vector<int> &v, int &inver)
         return (inver % 2 + 1) % 2;
     return inver % 2;
 }
+#include <regex>
+#include <string>
 std::string BLS::make_str(Node *n, std::vector<int> vec)
 {
+    // std::cout<<Color::color_green<<"have val"<<std::endl;
     std::string s = "";
     std::vector<std::string> all;
+    int grand_child;
     if (vec[0] == -1)
     {
-        // std::cout<<Color::color_green<<"have val"<<std::endl;
+        grand_child = n->number_of_parent;
         vec = *n->val;
         n = n->parent;
     }
+    else
+    {
+        grand_child = n->number_of_parent;
+        grand_child++;
+    }
+
     for (int i = 0; i < 9; i++)
     {
         s.append(std::to_string(vec[i]));
     }
-    // s.append("-");
+    s.append("-");
+    auto lam = [=](std::string &s1) {
+        size_t found = s1.find(s);
+        return (found != std::string::npos) ? true : false;
+    };
+    std::vector<std::string>::iterator it = std::find_if(all_record.begin(), all_record.end(), lam);
 
-    while (n != nullptr)
+    if (it == all_record.end())
+        s.append(std::to_string(grand_child));
+    else
     {
-        std::string a;
-        for (int i = 0; i < 9; i++)
+        // std::cerr<<"find"<<*it<<std::endl;
+        // exit(0);
+
+        std::string ss = (*it).substr(10);
+        // std::cerr<<"find"<<ss<<std::endl;
+        if (std::stoi(ss) <= grand_child)
+            s = *it;
+        else
         {
-            a.append(std::to_string((*n->val)[i]));
+            s = s + std::to_string(grand_child);
+            *it = s;
         }
-        all.push_back(a);
-        // s.append("-");
-        n = n->parent;
     }
-    std::reverse(all.begin(), all.end());
 
-    auto find = std::find(all.begin(), all.end(), s);
-    all = std::vector<std::string>(all.begin(), find);
-
-    if (std::count(all.begin(), all.end(), s) == 0)
-        all.push_back(s);
-    s = "";
-    for (size_t j = 0; j < all.size(); j++)
-    {
-        s = s + all[j];
-    }
-    // std::cerr << "ID:" << s << std::endl;
     return s;
 }
+bool my_find(const std::vector<int> & vec)
+{
+
+}
+
+
 void BLS::err_disp(const std::vector<int> &v)
 {
 
@@ -364,6 +381,14 @@ void BLS::err_disp(const std::vector<int> &v)
     }
     std::cout << std::string(12, '-') << "\033[0m" << std::endl;
 }
+
+
+
+
+
+
+
+
 #include <color.h>
 void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 {
@@ -414,39 +439,13 @@ void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 
 void BLS::Node::disp(const std::vector<int> &v)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            // std::cout << v[i * 3 + j] << "\t";
-        }
-        // std::cout << std::endl;
-    }
-    // std::cout << std::string(20, '-') << "\033[0m" << std::endl;
+   
 }
 void BLS::disp()
 {
-    // std::cout << "\033[2;33m" << std::string(12, '-') << std::endl;
-    for (int i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            // std::cout << (*current_node->val)[i * 3 + j] << "\t";
-        }
-        // std::cout << std::endl;
-    }
-    // std::cout << std::string(12, '-') << "\033[0m" << std::endl;
+   
 }
 void BLS::disp(std::vector<int> v)
 {
-    // std::cout << "\033[2;35m" << std::string(12, '-') << std::endl;
-    for (int i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            // std::cout << v[i * 3 + j] << "\t";
-        }
-        // std::cout << std::endl;
-    }
-    // std::cout << std::string(12, '-') << "\033[0m" << std::endl;
+    
 }
