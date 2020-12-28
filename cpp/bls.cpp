@@ -179,7 +179,7 @@ int BLS::search_for_answer(Node *cu_node)
         if (all_record.count(make_str(cu_node->up)) == 0)
         {
             // disp_in_menu(*cu_node->up->val, *cu_node->val);
-            std::cout << "up?" << std::endl;
+            // std::cout << "up?" << std::endl;
             search_queue.push(cu_node->up);
             all_record.insert(this->make_str(cu_node->up));
             choose = 0;
@@ -200,7 +200,7 @@ int BLS::search_for_answer(Node *cu_node)
     }
     if (cu_node->down != nullptr && choose == -1)
     {
-        std::cout << "down?" << std::endl;
+        // std::cout << "down?" << std::endl;
 
         if (all_record.count(make_str(cu_node->down)) == 0)
         {
@@ -222,7 +222,7 @@ int BLS::search_for_answer(Node *cu_node)
     }
     if (cu_node->right != nullptr && choose == -1)
     {
-        std::cout << "right" << std::endl;
+        // std::cout << "right" << std::endl;
         if (all_record.count(make_str(cu_node->right)) == 0)
         {
             // disp_in_menu(*cu_node->right->val, *cu_node->val);
@@ -247,7 +247,7 @@ int BLS::search_for_answer(Node *cu_node)
     }
     if (cu_node->left != nullptr && choose == -1)
     {
-        std::cout << "left" << std::endl;
+        // std::cout << "left" << std::endl;
         if (all_record.count(make_str(cu_node->left)) == 0)
         {
             // disp_in_menu(*cu_node->left->val, *cu_node->val);

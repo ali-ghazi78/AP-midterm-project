@@ -17,8 +17,8 @@ int main()
     std::cerr << "\033[35m"
               << "hello there"
               << "\033[0m" << std::endl;
-        // while(true)
-        // menu_loop();
+        while(true)
+        menu_loop();
     std::vector<int> init_vec = {8, 0, 3, 4, 6, 1,5,  7,2};
     std::vector<int> init_vec5 = {7, 1, 5, 8, 3, 2, 4,0, 6};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};

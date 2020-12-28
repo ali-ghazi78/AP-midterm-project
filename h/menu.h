@@ -6,6 +6,8 @@
 #include <bls.h>
 #include <ctime>
 
+std::vector<int> how_many_shuffle(size_t steps);
+
 std::string my_cin()
 {
     std::string myString;
@@ -31,29 +33,29 @@ bool solve_dfs(std::vector<int> init_vec)
 {
     clear();
     BLS t = BLS(init_vec);
-    int inver = 0;
-    while (!t.is_solvable(init_vec, inver))
-    {
-        std::random_shuffle(init_vec.begin(), init_vec.end());
-    }
     Board b(init_vec);
     std::cout << Color::color_green << "please be patient we are solving the following puzzle ... " << std::endl;
     b.disp_in_menu(init_vec, init_vec);
     int bfs_min_dep = b.loop();
     std::cout << Color::color_blue << "minimum depth that is requierd to solve the puzzel is: " << Color::color_red << bfs_min_dep << std::endl;
     std::cout << Color::color_green << "but u can choose ur desire depth" << std::endl;
-    std::cout << Color::color_green << "please enter ur depth :" << std::endl;
     std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+    std::cout << Color::color_green << "please enter ur depth :" << std::endl;
     int depth = 0;
     while (depth <= 0)
     {
         std::string ss = my_cin();
+        if (ss == "b" || ss == "B")
+        {
+            clear();
+            return 0;
+        }
         depth = is_number(ss);
         if (depth < 0)
         {
             std::cout << Color::color_red << "invalid input try again" << std::endl;
-            std::cout << Color::color_green << "please enter ur depth :" << std::endl;
             std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+            std::cout << Color::color_green << "please enter ur depth :" << std::endl;
         }
     }
     if (bfs_min_dep > depth)
@@ -145,13 +147,31 @@ bool show_random()
 
     std::string s;
     std::vector<int> init_vec = {1, 2, 3, 4, 5, 6, 7, 8, 0};
-    std::random_shuffle(init_vec.begin(), init_vec.end());
+    std::cout << Color::color_red << "how many move to shuffle the puzzle?" << std::endl;
+    bool go2 = false;
+    int shuffle;
+    while (!go2)
+    {
+        s = my_cin();
+        shuffle = is_number(s);
+        if (is_number(s) == -1)
+        {
+            clear();
+            std::cout << Color::color_red << "invalid input try again" << std::endl;
+        }
+        else
+            go2 = true;
+        std::cout << Color::color_red << "how many move to shuffle the puzzle?" << std::endl;
+    }
+    clear();
 
+    init_vec = how_many_shuffle(shuffle);
     Board t = Board(init_vec);
     while (!t.is_solvable(init_vec))
     {
-        std::random_shuffle(init_vec.begin(), init_vec.end());
+        init_vec = how_many_shuffle(10);
     }
+    // while(1);
     s = "";
     bool go = false;
     while (!go)
@@ -284,6 +304,68 @@ void menu_loop()
                   << "\"" << s << "\""
                   << "\033[0m" << std::endl;
     }
+}
+void move_zero(std::vector<int> &vec1, int x, int y, int loc)
+{
+    std::swap(vec1[loc], vec1[x + y * 3]);
+}
+
+std::vector<int> how_many_shuffle(size_t steps)
+{
+    std::vector<int> init_vec{1, 2, 3, 4, 5, 6, 7, 8, 0};
+    std::vector<int> random_move{1, 2, 3, 4};
+    int pre_move = 0;
+    while (steps--)
+    {
+        auto p = std::find(init_vec.begin(), init_vec.end(), 0);
+        int loc = p - init_vec.begin();
+        int x = p - init_vec.begin();
+        int y = x / 3;
+        x = x % 3;
+
+        int y_down = (y + 1 <= 2) ? (y + 1) : (-1);
+        int x_down = x;
+        int x_right = (x + 1 <= 2) ? (x + 1) : (-1);
+        int y_right = y;
+        int y_up = (y - 1 >= 0) ? (y - 1) : (-1);
+        int x_up = x;
+        int x_left = (x - 1 >= 0) ? (x - 1) : (-1);
+        int y_left = y;
+        bool resume = false;
+        std::srand(std::time(0));
+        std::random_shuffle(random_move.begin(), random_move.end());
+        bool done = false;
+        int i = 0;
+        while (!done)
+        {
+            std::random_shuffle(random_move.begin(), random_move.end());
+            if (y_up != -1 && random_move[0] == 1 && pre_move != 2)
+            {
+                done = true;
+                move_zero(init_vec, x_up, y_up, loc);
+                pre_move = 1;
+            }
+            if (y_down != -1 && random_move[0] == 2 && pre_move != 1)
+            {
+                done = true;
+                move_zero(init_vec, x_down, y_down, loc);
+                pre_move = 2;
+            }
+            if (x_right != -1 && random_move[0] == 3 && pre_move != 4)
+            {
+                done = true;
+                move_zero(init_vec, x_right, y_right, loc);
+                pre_move = 3;
+            }
+            if (x_left != -1 && random_move[0] == 4 && pre_move != 3)
+            {
+                done = true;
+                move_zero(init_vec, x_left, y_left, loc);
+                pre_move = 4;
+            }
+        }
+    }
+    return init_vec;
 }
 
 #endif
