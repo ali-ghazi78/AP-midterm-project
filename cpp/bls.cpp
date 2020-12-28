@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <regex>
+#include <string>
 #include <color.h>
 bool BLS::loop()
 {
@@ -81,8 +83,9 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> up = current_node;
         move_zero(up, x_up, y_up, loc);
-        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, up)) == 0)
+        if (my_find(make_str(this->current_node, up)) == 0)
         {
+
             this->current_node->up = new Node(move(up));
             all_address_to_del.push_back(this->current_node->up);
             if (this->current_node->up != nullptr)
@@ -96,7 +99,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> down = current_node;
         move_zero(down, x_down, y_down, loc);
-        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, down)) == 0)
+        if (my_find(make_str(this->current_node, down)) == 0)
         {
             // std::cerr << "makeing dow" << make_str(this->current_node, down) << std::endl;
 
@@ -113,7 +116,7 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     {
         std::vector<int> right = current_node;
         move_zero(right, x_right, y_right, loc);
-        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, right)) == 0)
+        if (my_find(make_str(this->current_node, right)) == 0)
         {
             this->current_node->right = new Node(move(right));
             all_address_to_del.push_back(this->current_node->right);
@@ -123,14 +126,13 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
                 this->current_node->right->set_parent_number();
             }
         }
-        
     }
     if (x_left != -1)
     {
         std::vector<int> left = current_node;
         move_zero(left, x_left, y_left, loc);
 
-        if (std::count(all_record.begin(), all_record.end(), make_str(this->current_node, left)) == 0)
+        if (my_find(make_str(this->current_node, left)) == 0)
         {
             this->current_node->left = new Node(move(left));
             all_address_to_del.push_back(this->current_node->left);
@@ -140,7 +142,6 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
                 this->current_node->left->set_parent_number();
             }
         }
-        
     }
 }
 
@@ -178,7 +179,8 @@ int BLS::search_for_answer(Node *cu_node)
     int choose = -1;
     if (cu_node->up != nullptr && 1)
     {
-        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->up)) == 0)
+
+        if (my_find(make_str(cu_node->up)) == 0)
         {
             // disp_in_menu(*cu_node->up->val, *cu_node->val);
             // std::cout << "up?" << std::endl;
@@ -204,7 +206,7 @@ int BLS::search_for_answer(Node *cu_node)
     {
         // std::cout << "down?" << std::endl;
 
-        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->down)) == 0)
+        if (my_find(make_str(cu_node->down)) == 0)
         {
             // disp_in_menu(*cu_node->down->val, *cu_node->val);
             search_queue.push(cu_node->down);
@@ -225,7 +227,7 @@ int BLS::search_for_answer(Node *cu_node)
     if (cu_node->right != nullptr && choose == -1)
     {
         // std::cout << "right" << std::endl;
-        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->right)) == 0)
+        if (my_find(make_str(cu_node->right)) == 0)
         {
             // disp_in_menu(*cu_node->right->val, *cu_node->val);
             search_queue.push(cu_node->right);
@@ -250,7 +252,7 @@ int BLS::search_for_answer(Node *cu_node)
     if (cu_node->left != nullptr && choose == -1)
     {
         // std::cout << "left" << std::endl;
-        if (std::count(all_record.begin(), all_record.end(), make_str(cu_node->left)) == 0)
+        if (my_find(make_str(cu_node->left)) == 0)
         {
             // disp_in_menu(*cu_node->left->val, *cu_node->val);
             search_queue.push(cu_node->left);
@@ -310,8 +312,7 @@ bool BLS::is_solvable(const std::vector<int> &v, int &inver)
         return (inver % 2 + 1) % 2;
     return inver % 2;
 }
-#include <regex>
-#include <string>
+
 std::string BLS::make_str(Node *n, std::vector<int> vec)
 {
     // std::cout<<Color::color_green<<"have val"<<std::endl;
@@ -350,7 +351,7 @@ std::string BLS::make_str(Node *n, std::vector<int> vec)
 
         std::string ss = (*it).substr(10);
         // std::cerr<<"find"<<ss<<std::endl;
-        if (std::stoi(ss) <= grand_child)
+        if (std::stoi(ss) <= grand_child + 20  )
             s = *it;
         else
         {
@@ -361,11 +362,12 @@ std::string BLS::make_str(Node *n, std::vector<int> vec)
 
     return s;
 }
-bool my_find(const std::vector<int> & vec)
+bool BLS::my_find(std::string my_str)
 {
-
+    auto it = std::find(all_record.begin(), all_record.end(), my_str);
+    
+    return (it==all_record.end())?0:1;
 }
-
 
 void BLS::err_disp(const std::vector<int> &v)
 {
@@ -382,14 +384,6 @@ void BLS::err_disp(const std::vector<int> &v)
     std::cout << std::string(12, '-') << "\033[0m" << std::endl;
 }
 
-
-
-
-
-
-
-
-#include <color.h>
 void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 {
     auto it1 = std::find(v.begin(), v.end(), 0);
@@ -439,13 +433,10 @@ void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 
 void BLS::Node::disp(const std::vector<int> &v)
 {
-   
 }
 void BLS::disp()
 {
-   
 }
 void BLS::disp(std::vector<int> v)
 {
-    
 }
