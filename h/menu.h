@@ -87,6 +87,9 @@ bool solve_dfs(std::vector<int> init_vec)
         if (s == "b" || s == "B")
             return 0;
     }
+    std::cout<<Color::color_yellow<<std::string(40,'-')<<std::endl;
+    std::cout<<Color::color_yellow<<"showing all steps"<<std::endl;
+
     for (int i = 0; i < result.size(); i++)
     {
         std::cout << Color::color_green << "step:" << i << "/" << result.size() - 1 << std::endl;
@@ -125,6 +128,9 @@ bool solve_bfs(std::vector<int> init_vec)
         if (s == "b" || s == "B")
             return 0;
     }
+    std::cout<<Color::color_yellow<<std::string(40,'-')<<std::endl;
+    std::cout<<Color::color_yellow<<"showing all steps"<<std::endl;
+
     for (int i = 0; i < result.size(); i++)
     {
         std::cout << Color::color_green << "step:" << i << "/" << result.size() - 1 << std::endl;
@@ -196,6 +202,133 @@ bool show_random()
         return solve_dfs(init_vec);
     }
 }
+bool show_costume_with_costume()
+{
+    std::string s;
+    bool done = false;
+    std::vector<int> vec = std::vector<int>(9, -1);
+    std::vector<int> vec_goal = std::vector<int>(9, -1);
+    int j = 0;
+    bool inver = true;
+
+    while (!done)
+    {
+        std::cout << Color::color_green << "please enter a number between 0 to 8  " << Color::color_red << "this is your initial state" << std::endl;
+        std::vector<int> init_vec = vec;
+        Board t = Board(init_vec);
+        t.disp_in_menu(init_vec, init_vec);
+        std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+        s = my_cin();
+        clear();
+        if (is_number(s) != -1 && s.size() == 1 && s != "9")
+        {
+            int num = std::stoi(s);
+            if (std::find(vec.begin(), vec.end(), num) == vec.end())
+            {
+                vec[j] = num;
+                j++;
+            }
+            else
+            {
+                std::cout << Color::color_red << "this number entered before" << std::endl;
+            }
+
+            done = (j >= 9) ? true : false;
+        }
+        else
+        {
+            if (s == "b" || s == "B")
+                return 0;
+            std::cout << Color::color_red << "invalid input" << std::endl;
+        }
+        if (done)
+        {
+            inver = t.is_solvable(vec);
+        }
+    }
+
+    done = false;
+    j = 0;
+
+    while (!done)
+    {
+        std::cout << Color::color_green << "please enter a number between 0 to 8  " << Color::color_red << "this is your goal state" << std::endl;
+        std::vector<int> init_vec = vec_goal;
+        Board t = Board(init_vec);
+        t.disp_in_menu(init_vec, init_vec);
+        std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+        s = my_cin();
+        clear();
+        if (is_number(s) != -1 && s.size() == 1 && s != "9")
+        {
+            int num = std::stoi(s);
+            if (std::find(vec_goal.begin(), vec_goal.end(), num) == vec_goal.end())
+            {
+                vec_goal[j] = num;
+                j++;
+            }
+            else
+            {
+                std::cout << Color::color_red << "this number entered before" << std::endl;
+            }
+
+            done = (j >= 9) ? true : false;
+        }
+        else
+        {
+            if (s == "b" || s == "B")
+                return 0;
+            std::cout << Color::color_red << "invalid input" << std::endl;
+        }
+        if (done && t.is_solvable(vec_goal) != inver)
+        {
+            std::cout << Color::color_red << "sorry but your puzzle is not solvable inversion of initial and goal state doesn't match enter sth else" << std::endl;
+            vec_goal = std::vector<int>(9, -1);
+            j = 0;
+            done = false;
+        }
+    }
+    clear();
+    std::cout << Color::color_green << "please wait" << std::endl;
+    Board a = Board(vec);
+    a.desire_final_state = vec_goal;
+    a.randome_or_costume = false;
+    a.loop();
+    std::vector<std::vector<int>> result = a.final_val;
+    std::cout<<Color::color_yellow<<std::string(40,'-')<<std::endl;
+    for (int i = 0; i < result.size(); i++)
+    {
+        std::cout << Color::color_green << "step:" << i + 1 << "/" << result.size() << std::endl;
+        if (i + 1 < result.size())
+            a.disp_in_menu(result[i], result[i + 1]);
+        std::cout << Color::color_green << "press enter to continue" << std::endl;
+        std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+
+        s = my_cin();
+        clear();
+        if (s == "b" || s == "B")
+            return true;
+    }
+    std::cout<<Color::color_yellow<<std::string(40,'-')<<std::endl;
+    std::cout<<Color::color_yellow<<"showing all steps"<<std::endl;
+    
+    for (int i = 0; i < result.size(); i++)
+    {
+        std::cout << Color::color_green << "step:" << i << "/" << result.size() - 1 << std::endl;
+        if (i + 1 < result.size())
+            a.disp_in_menu(result[i], result[i + 1]);
+    }
+    std::cout << Color::color_green << "done" << std::endl;
+    std::cout << Color::color_green << "press enter to continue" << std::endl;
+    std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
+    s = my_cin();
+    clear();
+    if (s == "b" || s == "B")
+    {
+        return true;
+    }
+}
+
 bool show_costume()
 {
     std::string s;
@@ -258,6 +391,8 @@ bool show_costume()
         if (s == "b" || s == "B")
             return true;
     }
+    std::cout<<Color::color_yellow<<std::string(40,'-')<<std::endl;
+    std::cout<<Color::color_yellow<<"showing all steps"<<std::endl;
     for (int i = 0; i < result.size(); i++)
     {
         std::cout << Color::color_green << "step:" << i << "/" << result.size() - 1 << std::endl;
@@ -282,7 +417,8 @@ void menu_loop()
     std::cout << Color::color_green << "please enter your desire option" << std::endl;
     std::cout << Color::color_green << "(1)" << Color::color_blue << "  solve random puzzle" << std::endl;
     std::cout << Color::color_green << "(2)" << Color::color_blue << "  solve costumized puzzle" << std::endl;
-    std::cout << Color::color_green << "(3)" << Color::color_blue << "  exit" << std::endl;
+    std::cout << Color::color_green << "(3)" << Color::color_blue << "  solve costumized puzzle with costume goal node" << std::endl;
+    std::cout << Color::color_green << "(4)" << Color::color_blue << "  exit" << std::endl;
     s = my_cin();
     clear();
     if (s == "1")
@@ -294,6 +430,11 @@ void menu_loop()
         show_costume();
     }
     else if (s == "3")
+    {
+        show_costume_with_costume();
+    }
+
+    else if (s == "4")
     {
         clear();
         exit(0);

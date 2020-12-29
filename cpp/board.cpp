@@ -16,6 +16,7 @@ int Board::loop()
 }
 Board::Board(std::vector<int> val)
 {
+    desire_final_state = {1, 2, 3, 4, 5, 6, 7, 8, 0};
     randome_or_costume = true; //true means random
     head = new Node(move(val));
     current_node = head;
@@ -117,7 +118,18 @@ void Board::make_adjacent_nodes(const std::vector<int> &current_node)
 }
 bool Board::check_if_is_answer(const std::vector<int> &v)
 {
-    return std::is_sorted(v.begin(), v.end() - 1) && v[v.size() - 1] == 0;
+
+    if (randome_or_costume) //true means random
+        return std::is_sorted(v.begin(), v.end() - 1) && v[v.size() - 1] == 0;
+    else
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (desire_final_state[i] != v[i])
+                return 0;
+        }
+        return 1;
+    }
 }
 
 size_t Board::show_path(Board::Node *n)

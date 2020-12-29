@@ -23,6 +23,7 @@ public:
         Node* left;
         Node* parent;
     };
+    std::vector<int >desire_final_state;
     Board(std::vector<int> val);
     Board()=default;
     std::queue<Node *> search_queue;

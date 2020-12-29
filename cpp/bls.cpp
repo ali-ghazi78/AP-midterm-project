@@ -50,6 +50,7 @@ void BLS::show_progress_bar()
 }
 BLS::BLS(std::vector<int> val)
 {
+    desire_final_state = {1,2,3,4,5,6,7,8,0};
     max_depth = 10;
     randome_or_costume = true; //true means random
     head = new Node(move(val));
@@ -184,7 +185,18 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
 
 bool BLS::check_if_is_answer(const std::vector<int> &v)
 {
-    return std::is_sorted(v.begin(), v.end() - 1) && v[v.size() - 1] == 0;
+
+    if (randome_or_costume) //true means random
+        return std::is_sorted(v.begin(), v.end() - 1) && v[v.size() - 1] == 0;
+    else
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (desire_final_state[i] != v[i])
+                return 0;
+        }
+        return 1;
+    }
 }
 
 size_t BLS::show_path(BLS::Node *n)
@@ -234,8 +246,7 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->down));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->down), all_grand_child.back()));
-                        checked = true;
-
+            checked = true;
         }
         if (check_if_is_answer(*cu_node->down->val))
         {
@@ -252,8 +263,7 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->right));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->right), all_grand_child.back()));
-                        checked = true;
-
+            checked = true;
         }
         if (check_if_is_answer(*cu_node->right->val))
         {
@@ -262,7 +272,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    else if (cu_node->left != nullptr )
+    else if (cu_node->left != nullptr)
     {
         if (my_find(make_str(cu_node->left), true) == 0)
         {
@@ -270,8 +280,7 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->left));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->left), all_grand_child.back()));
-                        checked = true;
-
+            checked = true;
         }
         if (check_if_is_answer(*cu_node->left->val))
         {
@@ -280,7 +289,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    if ((search_queue.size() >= 1 && checked==false) || search_queue.size() >= max_depth)
+    if ((search_queue.size() >= 1 && checked == false) || search_queue.size() >= max_depth)
     {
         search_queue.pop();
     }
@@ -353,5 +362,5 @@ bool BLS::my_find(const std::string &my_str, bool edit)
 void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 {
     Board b(v);
-    b.disp_in_menu(v,v2);
+    b.disp_in_menu(v, v2);
 }

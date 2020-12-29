@@ -27,6 +27,7 @@ public:
 
         void set_parent_number();
     };
+    std::vector<int> desire_final_state;
     void show_progress_bar();
     BLS(std::vector<int> val);
     BLS() = default;
