@@ -54,13 +54,13 @@ bool solve_dfs(std::vector<int> init_vec)
         if (depth < 0)
         {
             std::cout << Color::color_red << "invalid input try again" << std::endl;
-            std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
             std::cout << Color::color_green << "please enter ur depth :" << std::endl;
+            std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
         }
     }
     if (bfs_min_dep > depth)
     {
-
+        clear();
         std::cout << Color::color_red << "you entered :" << depth << std::endl;
         std::cout << Color::color_red << "but minimum depth that is requierd to solve the puzzel is :" << bfs_min_dep << std::endl;
         std::cout << Color::color_red << "we are sorry but it is impossible to solve the puzzle using given input " << std::endl;

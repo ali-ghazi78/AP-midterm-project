@@ -29,6 +29,7 @@ public:
 
         void set_parent_number();
     };
+    void show_progress_bar();
     BLS(std::vector<int> val);
     BLS() = default;
     size_t max_depth;
