@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include <regex>
 #include <string>
+#include <board.h>
 #include <color.h>
 bool BLS::loop()
 {
@@ -203,11 +203,11 @@ size_t BLS::show_path(BLS::Node *n)
 int BLS::search_for_answer(Node *cu_node)
 {
 
-    disp(*cu_node->val);
     current_node = cu_node;
     make_adjacent_nodes(*(cu_node->val));
 
-    int choose = -1;
+    bool checked = false;
+
     if (cu_node->up != nullptr)
     {
 
@@ -217,14 +217,8 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->up));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->up), all_grand_child.back()));
-
-            choose = 0;
+            checked = true;
         }
-        else
-        {
-            choose = -1;
-        }
-
         if (check_if_is_answer(*cu_node->up->val))
         {
             current_node = current_node->up;
@@ -232,7 +226,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    else if (cu_node->down != nullptr && choose == -1)
+    else if (cu_node->down != nullptr)
     {
         if (my_find(make_str(cu_node->down), true) == 0)
         {
@@ -240,10 +234,9 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->down));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->down), all_grand_child.back()));
-            choose = 0;
+                        checked = true;
+
         }
-        else
-            choose = -1;
         if (check_if_is_answer(*cu_node->down->val))
         {
             current_node = current_node->down;
@@ -251,7 +244,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    else if (cu_node->right != nullptr && choose == -1)
+    else if (cu_node->right != nullptr)
     {
         if (my_find(make_str(cu_node->right), true) == 0)
         {
@@ -259,11 +252,8 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->right));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->right), all_grand_child.back()));
-            choose = 0;
-        }
-        else
-        {
-            choose = -1;
+                        checked = true;
+
         }
         if (check_if_is_answer(*cu_node->right->val))
         {
@@ -272,7 +262,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    else if (cu_node->left != nullptr && choose == -1)
+    else if (cu_node->left != nullptr )
     {
         if (my_find(make_str(cu_node->left), true) == 0)
         {
@@ -280,11 +270,8 @@ int BLS::search_for_answer(Node *cu_node)
             all_grand_child.push_back(cu_node->number_of_parent + 1);
             all_record.insert(this->make_str(cu_node->left));
             all_map.insert(std::pair<std::string, int>(this->make_str(cu_node->left), all_grand_child.back()));
-            choose = 0;
-        }
-        else
-        {
-            choose = -1;
+                        checked = true;
+
         }
         if (check_if_is_answer(*cu_node->left->val))
         {
@@ -293,7 +280,7 @@ int BLS::search_for_answer(Node *cu_node)
             return 1;
         }
     }
-    if ((search_queue.size() >= 1 && choose == -1) || search_queue.size() >= max_depth)
+    if ((search_queue.size() >= 1 && checked==false) || search_queue.size() >= max_depth)
     {
         search_queue.pop();
     }
@@ -302,7 +289,7 @@ int BLS::search_for_answer(Node *cu_node)
         cu_node = search_queue.top();
     else
     {
-        std::cerr << "a problem is occured maybe depth is not defined" << BLS::Node::Node_no << std::endl;
+        std::cerr << "a problem is occured maybe depth is not enough" << BLS::Node::Node_no << std::endl;
         return 2;
     }
     current_node = cu_node;
@@ -329,7 +316,6 @@ bool BLS::is_solvable(const std::vector<int> &v, int &inver)
 
 std::string BLS::make_str(Node *n, const std::vector<int> &vec)
 {
-    // std::cout<<Color::color_green<<"have val"<<std::endl;
     std::string s = "";
     if (vec[0] == -1)
     {
@@ -361,78 +347,11 @@ bool BLS::my_find(const std::string &my_str, bool edit)
         }
         return 1;
     }
-
     return (it == all_record.end()) ? 0 : 1;
-}
-
-void BLS::err_disp(const std::vector<int> &v)
-{
-
-    std::cout << "\033[2;35m" << std::string(12, '-') << std::endl;
-    for (int i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            std::cout << v[i * 3 + j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::string(12, '-') << "\033[0m" << std::endl;
 }
 
 void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 {
-    auto it1 = std::find(v.begin(), v.end(), 0);
-    auto it2 = std::find(v2.begin(), v2.end(), 0);
-    size_t i1 = it1 - v.begin();
-    size_t i2 = it2 - v2.begin();
-
-    std::cerr << Color::color_red << "\t  " << std::string(7, '-') << std::endl;
-    for (int i = 0; i < 3; i++)
-    {
-        std::cerr << Color::color_red << Color::non_italic << "\t | ";
-
-        for (size_t j = 0; j < 3; j++)
-        {
-            if (i1 == i2 && i2 == i * 3 + j)
-            {
-                std::cerr << Color::color_reset << Color::color_red_b << " " << Color::color_reset << " ";
-            }
-            else if (v[i * 3 + j] == -1)
-            {
-                std::cerr << Color::color_reset << Color::color_blue_b << " " << Color::color_reset << " ";
-            }
-            else if (i1 == i * 3 + j)
-            {
-                if (j != 2 && i2 == i1 + 1)
-                    std::cerr << Color::color_reset << Color::color_red_b << " "
-                              << " " << Color::color_reset;
-                else
-                    std::cerr << Color::color_reset << Color::color_red_b << " " << Color::color_reset << " ";
-            }
-            else if (i2 == i * 3 + j)
-            {
-                if (j != 2 && i2 + 1 == i1)
-                    std::cerr << Color::color_reset << Color::color_red_b << v[i * 3 + j] << " " << Color::color_reset;
-                else
-                    std::cerr << Color::color_reset << Color::color_red_b << v[i * 3 + j] << Color::color_reset << " ";
-            }
-            else
-                std::cerr << Color::color_blue << v[i * 3 + j] << " ";
-        }
-        std::cerr << Color::color_red << Color::non_italic << "|";
-
-        std::cerr << std::endl;
-    }
-    std::cerr << Color::color_red << "\t  " << std::string(7, '-') << std::endl;
-}
-
-void BLS::Node::disp(const std::vector<int> &v)
-{
-}
-void BLS::disp()
-{
-}
-void BLS::disp(std::vector<int> v)
-{
+    Board b(v);
+    b.disp_in_menu(v,v2);
 }

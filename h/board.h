@@ -13,7 +13,6 @@ public:
     {
         
     public:
-        static void disp(const std::vector<int> &v);
         static size_t Node_no;
         Node(const std::vector<int> & initial_state);
         ~Node();
@@ -35,12 +34,9 @@ public:
     bool randome_or_costume ;
     void make_adjacent_nodes(const std::vector<int> &current_node);
     void move_zero(std::vector<int> &vec1, int x, int y, int loc);
-    void disp();
-    void disp( std::vector<int> v);
     bool check_if_is_answer(const std::vector<int> &v);
     bool search_for_answer(Node*  cu_node);
     bool is_solvable(const std::vector<int> &v);
-    void err_disp(const std::vector<int> &v);
     void disp_in_menu(const std::vector<int> &v,const std::vector<int> &v2);
     std::string make_str(const std::vector<int> &v);
     size_t show_path(Board::Node *n);

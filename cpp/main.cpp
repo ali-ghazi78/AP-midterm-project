@@ -79,7 +79,7 @@ void brute_force_test()
         if (a.is_solvable(init_vec))
         {
             a.loop();
-            a.disp(init_vec);
+            a.disp_in_menu(init_vec,init_vec);
         }
         else
         {
@@ -104,7 +104,7 @@ void brute_force_test2()
         if (a.is_solvable(init_vec,s))
         {
             a.loop();
-            a.disp(init_vec);
+            a.disp_in_menu(init_vec,init_vec);
         }
         else
         {
