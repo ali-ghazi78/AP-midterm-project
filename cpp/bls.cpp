@@ -9,13 +9,14 @@
 bool BLS::loop()
 {
     int done = 0;
-    int c = 200;
+    int c = 50;
     while (done == 0)
     {
         done = search_for_answer(current_node);
         // disp_in_menu(*current_node->val, *current_node->val);
-        // std::cerr << make_str(current_node) << "^" << std::endl;
+        // std::cerr << make_str(current_node) << "^" << std::endl
         //   << std::string(20, '-') << std::endl;
+        // ;
     }
     return done % 2; //2 means not found also 0
 }
@@ -79,68 +80,68 @@ void BLS::make_adjacent_nodes(const std::vector<int> &current_node)
     int x_left = (x - 1 >= 0) ? (x - 1) : (-1);
     int y_left = y;
     bool resume = false;
+    std::vector<int> up = current_node;
+    std::vector<int> down = current_node;
+    std::vector<int> right = current_node;
+    std::vector<int> left = current_node;
+
     if (y_up != -1)
     {
-        std::vector<int> up = current_node;
         move_zero(up, x_up, y_up, loc);
-        if (my_find(make_str(this->current_node, up)) == 0)
-        {
-
-            this->current_node->up = new Node(move(up));
-            all_address_to_del.push_back(this->current_node->up);
-            if (this->current_node->up != nullptr)
-            {
-                this->current_node->up->parent = this->current_node;
-                this->current_node->up->set_parent_number();
-            }
-        }
     }
     if (y_down != -1)
     {
-        std::vector<int> down = current_node;
         move_zero(down, x_down, y_down, loc);
-        if (my_find(make_str(this->current_node, down)) == 0)
-        {
-            // std::cerr << "makeing dow" << make_str(this->current_node, down) << std::endl;
-
-            this->current_node->down = new Node(move(down));
-            all_address_to_del.push_back(this->current_node->down);
-            if (this->current_node->down != nullptr)
-            {
-                this->current_node->down->parent = this->current_node;
-                this->current_node->down->set_parent_number();
-            }
-        }
     }
-    if (x_right != -1)
+    if (y_right != -1)
     {
-        std::vector<int> right = current_node;
         move_zero(right, x_right, y_right, loc);
-        if (my_find(make_str(this->current_node, right)) == 0)
+    }
+    if (y_left != -1)
+    {
+        move_zero(left, x_left, y_left, loc);
+    }
+
+    if (y_up != -1 && my_find(make_str(this->current_node, up)) == 0)
+    {
+
+        this->current_node->up = new Node(move(up));
+        all_address_to_del.push_back(this->current_node->up);
+        if (this->current_node->up != nullptr)
         {
-            this->current_node->right = new Node(move(right));
-            all_address_to_del.push_back(this->current_node->right);
-            if (this->current_node->right != nullptr)
-            {
-                this->current_node->right->parent = this->current_node;
-                this->current_node->right->set_parent_number();
-            }
+            this->current_node->up->parent = this->current_node;
+            this->current_node->up->set_parent_number();
         }
     }
-    if (x_left != -1)
+    else if (y_down != -1 && my_find(make_str(this->current_node, down)) == 0)
     {
-        std::vector<int> left = current_node;
-        move_zero(left, x_left, y_left, loc);
-
-        if (my_find(make_str(this->current_node, left)) == 0)
+        this->current_node->down = new Node(move(down));
+        all_address_to_del.push_back(this->current_node->down);
+        if (this->current_node->down != nullptr)
         {
-            this->current_node->left = new Node(move(left));
-            all_address_to_del.push_back(this->current_node->left);
-            if (this->current_node->left != nullptr)
-            {
-                this->current_node->left->parent = this->current_node;
-                this->current_node->left->set_parent_number();
-            }
+            this->current_node->down->parent = this->current_node;
+            this->current_node->down->set_parent_number();
+        }
+    }
+    else if (x_right != -1 && (my_find(make_str(this->current_node, right)) == 0))
+    {
+        this->current_node->right = new Node(move(right));
+        all_address_to_del.push_back(this->current_node->right);
+        if (this->current_node->right != nullptr)
+        {
+            this->current_node->right->parent = this->current_node;
+            this->current_node->right->set_parent_number();
+        }
+    }
+    else if (x_left != -1 && (my_find(make_str(this->current_node, left)) == 0))
+    {
+
+        this->current_node->left = new Node(move(left));
+        all_address_to_del.push_back(this->current_node->left);
+        if (this->current_node->left != nullptr)
+        {
+            this->current_node->left->parent = this->current_node;
+            this->current_node->left->set_parent_number();
         }
     }
 }
@@ -317,13 +318,12 @@ std::string BLS::make_str(Node *n, std::vector<int> vec)
 {
     // std::cout<<Color::color_green<<"have val"<<std::endl;
     std::string s = "";
-    std::vector<std::string> all;
     int grand_child;
     if (vec[0] == -1)
     {
         grand_child = n->number_of_parent;
         vec = *n->val;
-        n = n->parent;
+        // n = n->parent;
     }
     else
     {
@@ -340,23 +340,24 @@ std::string BLS::make_str(Node *n, std::vector<int> vec)
         size_t found = s1.find(s);
         return (found != std::string::npos) ? true : false;
     };
-    std::vector<std::string>::iterator it = std::find_if(all_record.begin(), all_record.end(), lam);
+    std::vector<std::string>::reverse_iterator it = std::find_if(all_record.rbegin(), all_record.rend(), lam);
 
-    if (it == all_record.end())
+    if (it == all_record.rend())
         s.append(std::to_string(grand_child));
     else
     {
-        // std::cerr<<"find"<<*it<<std::endl;
-        // exit(0);
-
         std::string ss = (*it).substr(10);
-        // std::cerr<<"find"<<ss<<std::endl;
-        if (std::stoi(ss) <= grand_child + 20  )
+        if (std::stoi(ss) < grand_child)
+        {
+            // std::cout << "ss1:" << s << std::endl;
             s = *it;
+            // std::cout << "ss2:" << s << std::endl;
+        }
         else
         {
             s = s + std::to_string(grand_child);
-            *it = s;
+            // std::cout << "ss:" << s << std::endl;
+            // *it = s;
         }
     }
 
@@ -365,8 +366,8 @@ std::string BLS::make_str(Node *n, std::vector<int> vec)
 bool BLS::my_find(std::string my_str)
 {
     auto it = std::find(all_record.begin(), all_record.end(), my_str);
-    
-    return (it==all_record.end())?0:1;
+
+    return (it == all_record.end()) ? 0 : 1;
 }
 
 void BLS::err_disp(const std::vector<int> &v)
