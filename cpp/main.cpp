@@ -31,7 +31,7 @@ int main()
     
     // std::vector<std::vector<int>> vv{init_vec1, init_vec2, init_vec3, init_vec4,init_vec5};
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    int m = 2000;
+    int m = 30;
     bool done=false;
         Board bb (init_vec1);
             std::cerr << "return : " <<bb.loop()<< std::endl;

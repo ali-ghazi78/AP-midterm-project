@@ -42,7 +42,7 @@ public:
     Node *head;
     Node *current_node;
     bool randome_or_costume;
-    bool my_find(const std::string &my_str);
+    bool my_find(const std::string &my_str,bool edit=false);
     void make_adjacent_nodes(const std::vector<int> &current_node);
     void move_zero(std::vector<int> &vec1, int x, int y, int loc);
     void disp();
