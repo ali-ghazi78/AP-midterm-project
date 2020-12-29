@@ -36,7 +36,10 @@ BLS::BLS(std::vector<int> val)
     search_queue.push(head);
 
     all_grand_child.push_back(head->number_of_parent);
-    all_record.push_back(make_str(current_node));
+    std::string s = make_str(current_node);
+    all_record.insert(s);
+    all_map.insert(std::pair<std::string,int>(s,all_grand_child.back())) ;
+
 }
 size_t BLS::Node::Node_no = 0;
 
@@ -201,7 +204,9 @@ int BLS::search_for_answer(Node *cu_node)
             std::cout << "up?" << std::endl;
             search_queue.push(cu_node->up);
             all_grand_child.push_back(cu_node->number_of_parent + 1);
-            all_record.push_back(this->make_str(cu_node->up));
+            all_record.insert(this->make_str(cu_node->up));
+            all_map.insert(std::pair<std::string,int>(this->make_str(cu_node->up),all_grand_child.back())) ;
+
             choose = 0;
         }
         else
@@ -227,7 +232,9 @@ int BLS::search_for_answer(Node *cu_node)
             // disp_in_menu(*cu_node->down->val, *cu_node->val);
             search_queue.push(cu_node->down);
             all_grand_child.push_back(cu_node->number_of_parent + 1);
-            all_record.push_back(this->make_str(cu_node->down));
+            all_record.insert(this->make_str(cu_node->down));
+            all_map.insert(std::pair<std::string,int>(this->make_str(cu_node->down),all_grand_child.back())) ;
+
             choose = 0;
         }
         else
@@ -249,7 +256,9 @@ int BLS::search_for_answer(Node *cu_node)
             // disp_in_menu(*cu_node->right->val, *cu_node->val);
             search_queue.push(cu_node->right);
             all_grand_child.push_back(cu_node->number_of_parent + 1);
-            all_record.push_back(this->make_str(cu_node->right));
+            all_record.insert(this->make_str(cu_node->right));
+            all_map.insert(std::pair<std::string,int>(this->make_str(cu_node->right),all_grand_child.back())) ;
+
             choose = 0;
         }
         else
@@ -275,7 +284,9 @@ int BLS::search_for_answer(Node *cu_node)
             // disp_in_menu(*cu_node->left->val, *cu_node->val);
             search_queue.push(cu_node->left);
             all_grand_child.push_back(cu_node->number_of_parent + 1);
-            all_record.push_back(this->make_str(cu_node->left));
+            all_record.insert(this->make_str(cu_node->left));
+            all_map.insert(std::pair<std::string,int>(this->make_str(cu_node->left),all_grand_child.back())) ;
+
             choose = 0;
         }
         else
@@ -357,17 +368,17 @@ std::string BLS::make_str(Node *n, const std::vector<int> &vec)
 }
 bool BLS::my_find(const std::string &my_str)
 {
-    auto it = std::find(all_record.rbegin(), all_record.rend(), my_str);
+    auto it = all_record.find(my_str);
 
-    if (it != all_record.rend())
-    {
-        int index = all_grand_child.size() - 1 - (it - all_record.rbegin());
-        int grand_current = this->current_node->number_of_parent +1;
-        int grand_child = all_grand_child[index];
-        return (grand_current < grand_child) ? 0 : 1;
-    }
+    // if (it != all_record.end())
+    // {
+    //     int index = all_grand_child.size() - 1 - (it - all_record.rbegin());
+    //     int grand_current = this->current_node->number_of_parent +1;
+    //     int grand_child = all_grand_child[index];
+    //     return (grand_current < grand_child) ? 0 : 1;
+    // }
 
-    return (it == all_record.rend()) ? 0 : 1;
+    return (it == all_record.end()) ? 0 : 1;
 }
 
 

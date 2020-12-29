@@ -5,6 +5,7 @@
 #include <memory>
 #include <stack>
 #include <set>
+#include <map>
 
 class BLS
 {
@@ -32,8 +33,9 @@ public:
     BLS() = default;
     size_t max_depth;
     std::stack<Node *> search_queue;
-    std::vector<std::string> all_record;
+    std::set<std::string> all_record;
     std::vector<int> all_grand_child;
+    std::map<std::string,int> all_map;
 
     std::vector<Node *> all_address_to_del;
     std::vector<std::vector<int>> final_val;
