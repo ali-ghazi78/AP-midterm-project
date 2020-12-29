@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++2a -Wall  -O4  -I./h  -c 
+CXXFLAGS = -std=c++2a -Wall  -O0  -I./h  -c 
 LXXFLAGS = -std=c++2a -I./h -pthread
 OBJECTS = ./obj/main.o ./obj/board.o ./obj/menu.o ./obj/bls.o   
 TARGET = main

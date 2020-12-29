@@ -268,8 +268,8 @@ bool Board::search_for_answer(Node *cu_node)
         search_queue.pop();
 
     // std::cerr << "sizeis: " << search_queue.size() << std::endl;
-    // if (Board::Node::Node_no % 1000 == 0)
-    //     std::cerr << "no of Nodes :" << Board::Node::Node_no << std::endl;
+    if (Board::Node::Node_no % 1000 == 0)
+        std::cerr << "no of Nodes :" << Board::Node::Node_no << std::endl;
 
     if (search_queue.size() >= 1)
         cu_node = search_queue.front();
