@@ -10,4 +10,4 @@ RUN apt-get -qq update \
 
 COPY . .
 
-CMD mkdir obj ; make clean && make && ./main 
+CMD make clean && make && ./main 
