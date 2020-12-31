@@ -223,15 +223,11 @@ size_t DLS::show_path(DLS::Node *n)
 }
 int DLS::search_for_answer(Node *cu_node)
 {
-
     current_node = cu_node;
     make_adjacent_nodes(*(cu_node->val));
-
     bool checked = false;
-
     if (cu_node->up != nullptr)
     {
-
         if (my_find(make_str(cu_node->up), true) == 0)
         {
             search_queue.push(cu_node->up);
@@ -302,7 +298,6 @@ int DLS::search_for_answer(Node *cu_node)
     {
         search_queue.pop();
     }
-
     if (search_queue.size() >= 1)
         cu_node = search_queue.top();
     else
@@ -311,7 +306,6 @@ int DLS::search_for_answer(Node *cu_node)
         return 2;
     }
     current_node = cu_node;
-
     return 0;
 }
 bool DLS::is_solvable(const std::vector<int> &v, int &inver)
