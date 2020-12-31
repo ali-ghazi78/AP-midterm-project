@@ -4,7 +4,7 @@
 #include <string>
 #include <cmath>
 #include <string>
-#include <board.h>
+#include <bfs.h>
 #include <color.h>
 bool BLS::loop()
 {
@@ -361,6 +361,6 @@ bool BLS::my_find(const std::string &my_str, bool edit)
 
 void BLS::disp_in_menu(const std::vector<int> &v, const std::vector<int> &v2)
 {
-    Board b(v);
+    BFS b(v);
     b.disp_in_menu(v, v2);
 }

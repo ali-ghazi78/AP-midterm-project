@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <bls.h>
 #include <ctime>
+#include <bfs.h>
 
 std::vector<int> how_many_shuffle(size_t steps);
 
@@ -33,7 +34,7 @@ bool solve_dfs(std::vector<int> init_vec)
 {
     clear();
     BLS t = BLS(init_vec);
-    Board b(init_vec);
+    BFS b(init_vec);
     std::cout << Color::color_green << "please be patient we are solving the following puzzle ... " << std::endl;
     b.disp_in_menu(init_vec, init_vec);
     int bfs_min_dep = b.loop();
@@ -110,7 +111,7 @@ bool solve_bfs(std::vector<int> init_vec)
     clear();
     std::cout << Color::color_green << "please wait. we are solving puzzle be patient ..." << std::endl;
     std::string s = "";
-    Board a = Board(init_vec);
+    BFS a = BFS(init_vec);
 
     a.loop();
     clear();
@@ -172,7 +173,7 @@ bool show_random()
     clear();
 
     init_vec = how_many_shuffle(shuffle);
-    Board t = Board(init_vec);
+    BFS t = BFS(init_vec);
     while (!t.is_solvable(init_vec))
     {
         init_vec = how_many_shuffle(10);
@@ -215,7 +216,7 @@ bool show_costume_with_costume()
     {
         std::cout << Color::color_green << "please enter a number between 0 to 8  " << Color::color_red << "this is your initial state" << std::endl;
         std::vector<int> init_vec = vec;
-        Board t = Board(init_vec);
+        BFS t = BFS(init_vec);
         t.disp_in_menu(init_vec, init_vec);
         std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
         s = my_cin();
@@ -254,7 +255,7 @@ bool show_costume_with_costume()
     {
         std::cout << Color::color_green << "please enter a number between 0 to 8  " << Color::color_red << "this is your goal state" << std::endl;
         std::vector<int> init_vec = vec_goal;
-        Board t = Board(init_vec);
+        BFS t = BFS(init_vec);
         t.disp_in_menu(init_vec, init_vec);
         std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
         s = my_cin();
@@ -290,7 +291,7 @@ bool show_costume_with_costume()
     }
     clear();
     std::cout << Color::color_green << "please wait" << std::endl;
-    Board a = Board(vec);
+    BFS a = BFS(vec);
     a.desire_final_state = vec_goal;
     a.randome_or_costume = false;
     a.loop();
@@ -339,7 +340,7 @@ bool show_costume()
     {
         std::cout << Color::color_green << "please enter a number between 0 to 8 " << std::endl;
         std::vector<int> init_vec = vec;
-        Board t = Board(init_vec);
+        BFS t = BFS(init_vec);
         t.disp_in_menu(init_vec, init_vec);
         std::cout << Color::color_blue << "enter  (b) to exit " << std::endl;
         s = my_cin();
@@ -375,7 +376,7 @@ bool show_costume()
     }
     clear();
     std::cout << Color::color_green << "please wait" << std::endl;
-    Board a = Board(vec);
+    BFS a = BFS(vec);
     a.loop();
     std::vector<std::vector<int>> result = a.final_val;
     for (int i = 0; i < result.size(); i++)
@@ -480,25 +481,26 @@ std::vector<int> how_many_shuffle(size_t steps)
         while (!done)
         {
             std::random_shuffle(random_move.begin(), random_move.end());
+
             if (y_up != -1 && random_move[0] == 1 && pre_move != 2)
             {
                 done = true;
                 move_zero(init_vec, x_up, y_up, loc);
                 pre_move = 1;
             }
-            if (y_down != -1 && random_move[0] == 2 && pre_move != 1)
+            else if (y_down != -1 && random_move[0] == 2 && pre_move != 1)
             {
                 done = true;
                 move_zero(init_vec, x_down, y_down, loc);
                 pre_move = 2;
             }
-            if (x_right != -1 && random_move[0] == 3 && pre_move != 4)
+            else if (x_right != -1 && random_move[0] == 3 && pre_move != 4)
             {
                 done = true;
                 move_zero(init_vec, x_right, y_right, loc);
                 pre_move = 3;
             }
-            if (x_left != -1 && random_move[0] == 4 && pre_move != 3)
+            else if (x_left != -1 && random_move[0] == 4 && pre_move != 3)
             {
                 done = true;
                 move_zero(init_vec, x_left, y_left, loc);

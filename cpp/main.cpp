@@ -1,5 +1,5 @@
 #include <iostream>
-#include "board.h"
+#include <bfs.h>
 #include <algorithm>
 #include <menu.h>
 #include <bls.h>
@@ -10,7 +10,7 @@ void brute_force_test();
 void find_solo()
 {
     std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-    Board a = Board(init_vec);
+    BFS a = BFS(init_vec);
     a.loop();
 }
 
@@ -41,7 +41,7 @@ int main()
     // std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
     int m = 30;
     bool done=false;
-        Board bb (init_vec1);
+        BFS bb (init_vec1);
             std::cerr << "return : " <<bb.loop()<< std::endl;
     
         BLS t = BLS(init_vec1);
@@ -74,7 +74,7 @@ void brute_force_test()
     while (i--)
     {
         std::random_shuffle(init_vec.begin(), init_vec.end());
-        Board a = Board(init_vec);
+        BFS a = BFS(init_vec);
         int s;
         if (a.is_solvable(init_vec))
         {
@@ -121,10 +121,10 @@ void brute_force_test2()
 // {
 
 //     std::vector<int> init_vec = {2, 4, 6, 5, 8, 3, 0, 1, 7};
-//     std::vector<Board::Node*> ve;
+//     std::vector<BFS::Node*> ve;
 //     for (int i = 0; i < 120000; i++) //120000
 //     {
-//         Board::Node * vv = new Board::Node (std::vector<int>({2, 4, 6, 5, 8, 3, 0, 1, 7}));
+//         BFS::Node * vv = new BFS::Node (std::vector<int>({2, 4, 6, 5, 8, 3, 0, 1, 7}));
 //         if (ve.size() >= 1)
 //         {
 //             vv->down = ve[ve.size() - 1];
