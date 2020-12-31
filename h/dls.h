@@ -31,6 +31,7 @@ public:
     void show_progress_bar();
     DLS(std::vector<int> val);
     DLS() = default;
+    ~DLS();
     size_t max_depth;
     std::stack<Node *> search_queue;
     std::set<std::string> all_record;

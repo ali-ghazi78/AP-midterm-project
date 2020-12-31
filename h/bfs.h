@@ -26,6 +26,7 @@ public:
     std::vector<int >desire_final_state;
     BFS(std::vector<int> val);
     BFS()=default;
+    ~BFS();
     std::queue<Node *> search_queue;
     std::set<std::string> all_record;
     std::vector<Node *> all_address_to_del;

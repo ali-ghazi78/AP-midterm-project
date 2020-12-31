@@ -48,9 +48,18 @@ void DLS::show_progress_bar()
             counter--;
     }
 }
+DLS::~DLS()
+{
+    for (int i = 0; i < all_address_to_del.size(); i++)
+    {
+        delete all_address_to_del[i];
+        all_address_to_del[i] = nullptr;
+    }
+}
+
 DLS::DLS(std::vector<int> val)
 {
-    desire_final_state = {1,2,3,4,5,6,7,8,0};
+    desire_final_state = {1, 2, 3, 4, 5, 6, 7, 8, 0};
     max_depth = 10;
     randome_or_costume = true; //true means random
     head = new Node(move(val));

@@ -14,6 +14,14 @@ int BFS::loop()
     }
     return final_val.size();
 }
+BFS::~BFS()
+{
+    for (int i = 0; i < all_address_to_del.size(); i++)
+    {
+        delete all_address_to_del[i];
+        all_address_to_del[i] = nullptr;
+    }
+}
 BFS::BFS(std::vector<int> val)
 {
     desire_final_state = {1, 2, 3, 4, 5, 6, 7, 8, 0};

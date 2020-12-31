@@ -328,6 +328,7 @@ bool show_costume_with_costume()
     {
         return true;
     }
+    return false;
 }
 
 bool show_costume()
@@ -409,6 +410,8 @@ bool show_costume()
     {
         return true;
     }
+    return false;
+
 }
 
 void menu_loop()
