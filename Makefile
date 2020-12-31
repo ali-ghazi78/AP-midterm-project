@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++2a -Wall  -O0  -I./h  -c 
 LXXFLAGS = -std=c++2a -I./h -pthread
-OBJECTS = ./obj/main.o ./obj/bfs.o ./obj/menu.o ./obj/bls.o   
+OBJECTS = ./obj/main.o ./obj/bfs.o ./obj/menu.o ./obj/dls.o   
 TARGET = main
 
 
@@ -13,8 +13,8 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) ./cpp/bfs.cpp -o ./obj/bfs.o
 ./obj/menu.o: ./cpp/menu.cpp ./h/menu.h
 	$(CXX) $(CXXFLAGS) ./cpp/menu.cpp -o ./obj/menu.o
-./obj/bls.o:  ./h/bls.h
-	$(CXX) $(CXXFLAGS) ./cpp/bls.cpp -o ./obj/bls.o
+./obj/dls.o:  ./h/dls.h
+	$(CXX) $(CXXFLAGS) ./cpp/dls.cpp -o ./obj/dls.o
 
 clean:
 	rm -fv $(TARGET) $(OBJECTS)

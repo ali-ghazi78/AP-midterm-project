@@ -3,7 +3,7 @@
 #include <iostream>
 #include <color.h>
 #include <cstdlib>
-#include <bls.h>
+#include <dls.h>
 #include <ctime>
 #include <bfs.h>
 
@@ -33,7 +33,7 @@ int is_number(const std::string &s)
 bool solve_dfs(std::vector<int> init_vec)
 {
     clear();
-    BLS t = BLS(init_vec);
+    DLS t = DLS(init_vec);
     BFS b(init_vec);
     std::cout << Color::color_green << "please be patient we are solving the following puzzle ... " << std::endl;
     b.disp_in_menu(init_vec, init_vec);
@@ -70,7 +70,7 @@ bool solve_dfs(std::vector<int> init_vec)
     }
 
     std::string s = "";
-    BLS a = BLS(init_vec);
+    DLS a = DLS(init_vec);
     a.max_depth = depth;
     a.loop();
     // clear();
